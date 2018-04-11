@@ -6,5 +6,6 @@ int sc_main(int argc, char *argv[])
     simple_bus_test top("top");
     sc_start(1000, SC_NS);
 
-  return 0;
+    return 0;
 }
+

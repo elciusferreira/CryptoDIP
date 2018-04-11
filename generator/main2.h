@@ -1,12 +1,16 @@
+#ifndef __main2_h
+#define __main2_h
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <opencv2/highgui.hpp>
 
+
 class Pixel{
 private:
-    char r,g,b,a;
+    char r, g, b, a;
 
 public:
     Pixel(char r, char g, char b, char a){
@@ -42,7 +46,12 @@ public:
     int getA(){
         return a & 0xff;
     }
+
+    void print(){
+        printf("R: %c\nG: %c\nB: %c\nA: %c\n\n", r, g, b, a);
+    }
 };
+
 
 class Encryption{
 private:
@@ -58,6 +67,12 @@ private:
     }
 
 public:
+    Encryption(){
+        for(int i=0; i<5 ; i++)
+            key[i] = (i*12+70)%256;
+        sizeKey = 5;
+    }
+
     Encryption(std::vector<Pixel> input){
         this->input = input;
         for(int i=0; i<5 ; i++)
@@ -82,7 +97,7 @@ public:
         j=0;
         int i=0;
         char r,g,b,a;
-        for (int w = 0; w < input.size() ; w++){
+        for (unsigned int w = 0; w < input.size() ; w++){
             i = (i+1)%256;
             j = (j+s[i])%256;
             change(i,j);
@@ -107,7 +122,7 @@ public:
 class ModuleTest{
 private:
     Encryption encryptionF;
-    std::string path;
+    std::string path, outputText;
     std::vector<Pixel> elements;
     bool _read;
 
@@ -138,7 +153,9 @@ public:
                     buffer[it] = *image.ptr(y,x);     // B component
 
                     it = 0;
-                    elements.push_back(Pixel(buffer[0], buffer[1], buffer[2], '0'));
+                    Pixel aux = Pixel(buffer[0], buffer[1], buffer[2], char(0));
+//                    aux.print();
+                    elements.push_back(aux);
                 }
             }
         }
@@ -153,11 +170,11 @@ public:
 
     /* CRC */
     void crc(){
-        for(int i = 0; i < elements.size(); i++){
-            outputText+= std::to_string(elements.at(i).getR()) + " ";
-            outputText+= std::to_string(elements.at(i).getG()) + " ";
-            outputText+= std::to_string(elements.at(i).getB()) + " ";
-            outputText+= std::to_string(elements.at(i).getA()) + " ";
+        for(unsigned int i = 0; i < elements.size(); i++){
+            outputText+= "" + std::to_string(elements.at(i).getR());
+            outputText+= " " + std::to_string(elements.at(i).getG());
+            outputText+= " " + std::to_string(elements.at(i).getB());
+            outputText+= " " + std::to_string(elements.at(i).getA());
             outputText+= ", CRC\n";
         }
     }
@@ -169,6 +186,7 @@ public:
         output << outputText;
         output.close();
     }
-
 };
+
+#endif
 

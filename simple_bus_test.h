@@ -3,11 +3,10 @@
 
 #include <systemc.h>
 
-//#include "simple_bus_my_block.h"
 #include "simple_bus.h"
 #include "simple_bus_fast_mem.h"
 #include "simple_bus_arbiter.h"
-#include "simple_bus_my_gpu.h"
+#include "simple_bus_gpu.h"
 
 SC_MODULE(simple_bus_test) {
     // channels
@@ -15,7 +14,7 @@ SC_MODULE(simple_bus_test) {
 
     // module instances
     //simple_bus_my_block      *my_master;
-    simple_bus_my_gpu *gpu;
+    simple_bus_gpu *gpu;
     simple_bus *bus;
     simple_bus_fast_mem *fast_mem;
     simple_bus_arbiter *arbiter;
@@ -24,8 +23,8 @@ SC_MODULE(simple_bus_test) {
     SC_CTOR(simple_bus_test)
             : C1("C1") {
         // create instances
-        //gpu = new simple_bus_my_gpu("mygpu", 0x80, 0x1090, 4096, 100, true, true);
-        gpu = new simple_bus_my_gpu("mygpu");
+        //gpu = new simple_bus_gpu("mygpu", 0x80, 0x1090, 4096, 100, true, true);
+        gpu = new simple_bus_gpu("mygpu");
         gpu->toggleVerbose();
         gpu->toggleTest();
 
