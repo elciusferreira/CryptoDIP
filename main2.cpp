@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <opencv2/highgui.hpp>
 
@@ -105,6 +106,7 @@ public:
 
 class ModuleTest{
 private:
+    Encryption encryptionF;
     std::string path;
     std::vector<Pixel> elements;
     bool _read;
@@ -125,7 +127,7 @@ public:
 
             printf("The image dimensions are %i x %i pixels.\n\n", image.cols, image.rows);
 
-//            int size = image.rows*image.cols*4;
+//          int size = image.rows*image.cols*4;
             unsigned int it = 0;
             char buffer[3];
 
@@ -139,46 +141,34 @@ public:
                     elements.push_back(Pixel(buffer[0], buffer[1], buffer[2], '0'));
                 }
             }
-
-
-
         }
     }
 
     /* Open image and save in elements */
 
     void encryption(){
-
-
+        encryptionF.setInput(elements);
+        elements = encryptionF.run();
     }
 
+    /* CRC */
+    void crc(){
+        for(int i = 0; i < elements.size(); i++){
+            outputText+= std::to_string(elements.at(i).getR()) + " ";
+            outputText+= std::to_string(elements.at(i).getG()) + " ";
+            outputText+= std::to_string(elements.at(i).getB()) + " ";
+            outputText+= std::to_string(elements.at(i).getA()) + " ";
+            outputText+= ", CRC\n";
+        }
+    }
+
+    // Save file
+    void saveFile(){
+        std::ofstream output;
+        output.open ("ouput.txt");
+        output << outputText;
+        output.close();
+    }
 
 };
 
-
-//int main(){
-//    // TEST PIXEL
-//    Pixel p(50,100,150,200);
-//    //std::cout<< p.convertToFullNumber()<<"\n";
-//    Pixel p2(3358745750);
-//    std::cout<< p2.getR()<< " "<<p2.getG()<< " "<<p2.getB()<< " "<<p2.getA()<<"\n";
-//
-//    // TESTE ENCRYPTION
-//    std::vector<Pixel> arrayPixels;
-//    arrayPixels.push_back(p);
-//    arrayPixels.push_back(p2);
-//    //std::cout<< arrayPixels.at(1).getR()<< "\n";
-//
-//    // IDA
-//    Encryption encryption(arrayPixels);
-//    arrayPixels = encryption.run();
-//    //std::cout<< arrayPixels.at(0).getR()<< "\n";
-//
-//    // VOLTA
-//    encryption.setInput(arrayPixels);
-//    arrayPixels = encryption.run();
-//    //std::cout<< arrayPixels.at(0).getR()<<"\n";
-//
-//
-//    return 0;
-//}
