@@ -8,7 +8,7 @@ set(CRYPTODIP_VERSION_MAJOR 0)
 set(CRYPTODIP_VERSION_MINOR 1)
 
 # Set the compiler
-set(CMAKE_CXX_COMPILER "g++-5")
+#set(CMAKE_CXX_COMPILER "g++-5")
 
 # SystemC File tree Settings
 set(SYSTEMC_HOME "/usr/local/systemc-2.3.2")
@@ -58,6 +58,6 @@ add_executable(CryptoDIP.x
         simple_bus_gpu.cpp
         simple_bus_encryption.cpp
         simple_bus_tools.cpp
-        simple_bus_types.cpp)
+        simple_bus_types.cpp imageWrite.h)
 
 target_link_libraries(CryptoDIP.x ${SYSTEMC_LIB_DIR}/libsystemc.a ${OpenCV_LIBS})

@@ -3,8 +3,8 @@
 
 void simple_bus_gpu::main_action() {
     int width, height, size;
-    pixel *bufferA = new pixel[m_max_size];
-    pixel *bufferB = new pixel[m_max_size];
+    int *bufferA = new int[m_max_size];
+    int *bufferB = new int[m_max_size];
 
     if (m_test) {
         for (int i = 1; i <= 6; ++i)
@@ -38,6 +38,11 @@ void simple_bus_gpu::main_action() {
                 }
                 --j;
             }
+
+            // Write to file
+            imageWrite(bufferA, height, width, "original.png");
+            imageWrite(bufferB, height, width, "rotated.png");
+
 
             // Write back the rotation result
             /***

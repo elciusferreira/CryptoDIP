@@ -3,6 +3,7 @@
 
 #include <systemc.h>
 #include "simple_bus_direct_if.h"
+#include "imageWrite.h"
 
 /**
  - Endereço padrão de leitura de imagens: 0x0080
@@ -10,7 +11,7 @@
  - Tamanho max de imagem: 64x64 = 4096 words(4 bytes)
 **/
 
-typedef int pixel;
+//typedef int pixel;
 
 SC_MODULE(simple_bus_gpu) {
 private:
