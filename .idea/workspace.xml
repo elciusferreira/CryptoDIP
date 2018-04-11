@@ -13,42 +13,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70d312a5-8965-4df7-82ec-ed3bb7b639bc" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/CryptoDIP.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_arbiter.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_arbiter.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_arbiter_if.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_blocking_if.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_communication.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_communication.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_direct_if.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_fast_mem.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_gpu.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_gpu.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_main.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_master_blocking.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_master_blocking.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_master_non_blocking.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_master_non_blocking.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_non_blocking_if.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_request.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_slave_if.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_slow_mem.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_test.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_tools.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_types.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simple_bus_types.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_master_direct.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_direct.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_master_direct.h" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_direct.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/release/" />
@@ -66,8 +32,8 @@
       <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
+            <state relative-caret-position="435">
+              <caret line="58" column="33" selection-start-line="58" selection-start-column="33" selection-end-line="58" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -75,8 +41,8 @@
       <file leaf-file-name="simple_bus_communication.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simple_bus_communication.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="56" column="18" selection-start-line="56" selection-start-column="18" selection-end-line="56" selection-end-column="18" />
+            <state relative-caret-position="-289">
+              <caret line="13" column="24" lean-forward="true" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -88,7 +54,7 @@
         <entry file="file://$PROJECT_DIR$/simple_bus_communication.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
-              <caret line="43" column="8" lean-forward="true" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
+              <caret line="43" column="8" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
               <folding>
                 <element signature="e#75#95#0" expanded="true" />
               </folding>
@@ -117,9 +83,9 @@
         <option value="$PROJECT_DIR$/simple_bus_gpu.cpp" />
         <option value="$PROJECT_DIR$/simple_bus_gpu.h" />
         <option value="$PROJECT_DIR$/simple_bus_test.h" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/simple_bus_communication.h" />
         <option value="$PROJECT_DIR$/simple_bus_communication.cpp" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
       </list>
     </option>
   </component>
@@ -130,8 +96,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1" />
-    <option name="y" value="-4" />
+    <option name="x" value="1365" />
+    <option name="y" value="764" />
     <option name="width" value="1368" />
     <option name="height" value="773" />
   </component>
@@ -190,20 +156,20 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1523409637979</updated>
-      <workItem from="1523409639596" duration="2635000" />
+      <workItem from="1523409639596" duration="5744000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2635000" />
+    <option name="totallyTimeSpent" value="5744000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-4" width="1368" height="773" extended-state="6" />
+    <frame x="1365" y="-4" width="1368" height="773" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20790629" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.46084338" />
+      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.25301206" />
       <window_info anchor="bottom" id="CMake" weight="0.3298193" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -274,27 +240,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_communication.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
-          <caret line="43" column="8" lean-forward="true" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
+          <caret line="43" column="8" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
           <folding>
             <element signature="e#75#95#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="58" column="33" selection-start-line="58" selection-start-column="33" selection-end-line="58" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_communication.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="56" column="18" selection-start-line="56" selection-start-column="18" selection-end-line="56" selection-end-column="18" />
+        <state relative-caret-position="-289">
+          <caret line="13" column="24" lean-forward="true" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>

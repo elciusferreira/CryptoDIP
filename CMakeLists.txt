@@ -56,6 +56,7 @@ add_executable(CryptoDIP.x
         simple_bus_master_non_blocking.cpp
         simple_bus_communication.cpp
         simple_bus_gpu.cpp
+        simple_bus_encryption.cpp
         simple_bus_tools.cpp
         simple_bus_types.cpp)
 
