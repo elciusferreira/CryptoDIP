@@ -126,6 +126,31 @@ private:
     std::vector<Pixel> elements;
     bool _read;
 
+    /* Combine two integers */
+    int combine(int a, int b){
+       int times = 1;
+       while(times <= b)
+          times *= 10;
+       return a*times + b;
+    }
+
+    /* Converts a integer to const char* */
+    const char* toConstChar(int value){
+        //printf("VALUE: %i\n", value);
+        int size = 0;
+        int aux = value;
+        if (aux < 0) size = 1; // remove this line if '-' counts as a digit
+        while(aux){
+            aux /= 10;
+            size++;
+        }
+        printf("size %i\n", size);
+        char* value_str = new char[size];
+        sprintf(value_str, "%d", value);
+        //printf("value_str %s\n", value_str);
+        return value_str;
+    }
+
 
 public:
     ModuleTest(std::string path){
@@ -169,13 +194,35 @@ public:
     }
 
     /* CRC */
-    void crc(){
-        for(unsigned int i = 0; i < elements.size(); i++){
-            outputText+= "" + std::to_string(elements.at(i).getR());
-            outputText+= " " + std::to_string(elements.at(i).getG());
-            outputText+= " " + std::to_string(elements.at(i).getB());
-            outputText+= " " + std::to_string(elements.at(i).getA());
-            outputText+= ", CRC\n";
+    void crcGenerator(){
+        size_pixels = element.size();
+        char r, g, b, a;
+        int aux, makeCrc = 0;
+        for(int i = 0; i < size_pixels; i++){
+            r = element.at(i).getR();
+            g = element.at(i).getG();
+            b = element.at(i).getB();
+            a = element.at(i).getA();
+
+            aux = combine(r, g);
+            aux = combine(aux, b);
+            aux = combine(aux, a);
+            printf("aux %i\n", aux);
+            const char* components = toConstChar(aux);
+            unsigned char digest[SHA256_DIGEST_LENGTH];
+
+            SHA256_CTX ctx;
+            SHA256_Init(&ctx);
+            SHA256_Update(&ctx, components, strlen(components));
+            SHA256_Final(digest, &ctx);
+
+            char* SHAString = new char[SHA256_DIGEST_LENGTH*2+1];
+            for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+              sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
+
+            outputText +=  std::to_string(SHAString) + "," + std::to_string(r) + "," + std::to_string(g) + "," +
+                std::to_string(b) + "," +std::to_string(a) + "\n";
+
         }
     }
 
@@ -189,4 +236,3 @@ public:
 };
 
 #endif
-
