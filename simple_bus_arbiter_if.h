@@ -47,8 +47,8 @@ class simple_bus_arbiter_if
   : public virtual sc_interface
 {
 public:
-  virtual simple_bus_request * 
-    arbitrate(const simple_bus_request_vec &requests) = 0;
+    virtual simple_bus_request *
+        arbitrate(const simple_bus_request_vec &requests) = 0;
 
 }; // end class simple_bus_arbiter_if
 

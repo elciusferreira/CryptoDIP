@@ -6,12 +6,12 @@ void simple_bus_gpu::main_action() {
     int *bufferA = new int[m_max_size];
     int *bufferB = new int[m_max_size];
 
-    if (m_test) {
-        for (int i = 1; i <= 6; ++i)
-            bufferA[i - 1] = i;
-        width = 2;
-        height = 3;
-    }
+//    if (m_test) {
+//        for (int i = 1; i <= 6; ++i)
+//            bufferA[i - 1] = i;
+//        width = 2;
+//        height = 3;
+//    }
 
     while (true) {
         bus_port->direct_read(&width, m_rd_addr);
@@ -40,9 +40,10 @@ void simple_bus_gpu::main_action() {
             }
 
             // Write to file
-            imageWrite(bufferA, height, width, "original.png");
-            imageWrite(bufferB, height, width, "rotated.png");
-
+            if (m_test) {
+                imageWrite(bufferA, height, width, "original.png");
+                imageWrite(bufferB, height, width, "rotated.png");
+            }
 
             // Write back the rotation result
             /***

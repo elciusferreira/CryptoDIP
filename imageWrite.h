@@ -3,7 +3,6 @@
 
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
-//#include "opencv2"
 
 
 void inline imageWrite(int* pixelArray, int height, int width, const char* file)

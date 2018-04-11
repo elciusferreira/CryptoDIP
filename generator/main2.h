@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <opencv2/highgui.hpp>
+#include <openssl/sha.h>
 
 
 class Pixel{
@@ -31,24 +32,25 @@ public:
         return ((r << 24) & 0xFF000000) + ((g << 16) & 0x00FF0000) + ((b << 8) & 0x0000FF00) + (a & 0x000000FF);
     }
 
-    int getR(){
+    unsigned int getR(){
         return r & 0xff;
     }
 
-    int getG(){
+    unsigned int getG(){
         return g & 0xff;
     }
 
-    int getB(){
+    unsigned int getB(){
         return b & 0xff;
     }
 
-    int getA(){
+    unsigned int getA(){
         return a & 0xff;
     }
 
     void print(){
-        printf("R: %c\nG: %c\nB: %c\nA: %c\n\n", r, g, b, a);
+//        printf("R: %c\nG: %c\nB: %c\nA: %c\n\n", r, g, b, a);
+        std::cout<< r<< " "<< g<< " "<< (b & 0xff)<< " "<< (a & 0xff)<< "\n";
     }
 };
 
@@ -126,32 +128,6 @@ private:
     std::vector<Pixel> elements;
     bool _read;
 
-    /* Combine two integers */
-    int combine(int a, int b){
-       int times = 1;
-       while(times <= b)
-          times *= 10;
-       return a*times + b;
-    }
-
-    /* Converts a integer to const char* */
-    const char* toConstChar(int value){
-        //printf("VALUE: %i\n", value);
-        int size = 0;
-        int aux = value;
-        if (aux < 0) size = 1; // remove this line if '-' counts as a digit
-        while(aux){
-            aux /= 10;
-            size++;
-        }
-        printf("size %i\n", size);
-        char* value_str = new char[size];
-        sprintf(value_str, "%d", value);
-        //printf("value_str %s\n", value_str);
-        return value_str;
-    }
-
-
 public:
     ModuleTest(std::string path){
         this->path = path;
@@ -167,7 +143,6 @@ public:
 
             printf("The image dimensions are %i x %i pixels.\n\n", image.cols, image.rows);
 
-//          int size = image.rows*image.cols*4;
             unsigned int it = 0;
             char buffer[3];
 
@@ -179,36 +154,39 @@ public:
 
                     it = 0;
                     Pixel aux = Pixel(buffer[0], buffer[1], buffer[2], char(0));
-//                    aux.print();
+                    aux.print();
                     elements.push_back(aux);
                 }
             }
         }
     }
 
-    /* Open image and save in elements */
-
     void encryption(){
+        encryptionF.setInput(elements);
+        elements = encryptionF.run();
         encryptionF.setInput(elements);
         elements = encryptionF.run();
     }
 
     /* CRC */
     void crcGenerator(){
-        size_pixels = element.size();
+        unsigned int size_pixels = elements.size();
         char r, g, b, a;
-        int aux, makeCrc = 0;
-        for(int i = 0; i < size_pixels; i++){
-            r = element.at(i).getR();
-            g = element.at(i).getG();
-            b = element.at(i).getB();
-            a = element.at(i).getA();
+        //unsigned int aux;
+        for(unsigned int i = 0; i < size_pixels; i++){
+            printf("volta %u\n", i);
+            elements.at(i).print();
 
-            aux = combine(r, g);
-            aux = combine(aux, b);
-            aux = combine(aux, a);
-            printf("aux %i\n", aux);
-            const char* components = toConstChar(aux);
+            r = elements.at(i).getR();
+            g = elements.at(i).getG();
+            b = elements.at(i).getB();
+            a = elements.at(i).getA();
+            char components[4];
+            components[0] = elements.at(i).getR();
+            components[1] = elements.at(i).getG();
+            components[2] = elements.at(i).getB();
+            components[3] = elements.at(i).getA();
+
             unsigned char digest[SHA256_DIGEST_LENGTH];
 
             SHA256_CTX ctx;
@@ -217,19 +195,18 @@ public:
             SHA256_Final(digest, &ctx);
 
             char* SHAString = new char[SHA256_DIGEST_LENGTH*2+1];
-            for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
-              sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
+            for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+                sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
 
-            outputText +=  std::to_string(SHAString) + "," + std::to_string(r) + "," + std::to_string(g) + "," +
-                std::to_string(b) + "," +std::to_string(a) + "\n";
-
+            outputText += std::string(SHAString) + "," + std::to_string(r & 0xff) + "," + std::to_string(g & 0xff) + "," +
+                    std::to_string(b & 0xff) + "," + std::to_string(a & 0xff) + "\n";
         }
     }
 
     // Save file
     void saveFile(){
         std::ofstream output;
-        output.open ("ouput.txt");
+        output.open ("output.txt");
         output << outputText;
         output.close();
     }

@@ -11,8 +11,6 @@
  - Tamanho max de imagem: 64x64 = 4096 words(4 bytes)
 **/
 
-//typedef int pixel;
-
 SC_MODULE(simple_bus_gpu) {
 private:
     unsigned int m_rd_addr;
