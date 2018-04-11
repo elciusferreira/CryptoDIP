@@ -19,8 +19,8 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_master_non_blocking.cpp : The master using the non-blocking BUS
+                                       interface.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +36,42 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#include "simple_bus_master_non_blocking.h"
 
-#include <systemc.h>
-
-#include "simple_bus_direct_if.h"
-
-
-SC_MODULE(simple_bus_master_direct)
+void simple_bus_master_non_blocking::main_action()
 {
-  // ports
-  sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
+  int mydata;
+  int cnt = 0;
+  unsigned int addr = m_start_address;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
+  wait(); // ... for the next rising clock edge
+  while (true)
+    {
+      bus_port->read(m_unique_priority, &mydata, addr, m_lock);
+      while ((bus_port->get_status(m_unique_priority) != SIMPLE_BUS_OK) &&
+	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
+	wait();
+      if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%s %s : ERROR cannot read from %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), addr);
 
-  // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
-    : sc_module(name_)
-    , m_address(address)
-    , m_timeout(timeout)
-    , m_verbose(verbose)
-  {
-    // process declaration
-    SC_THREAD(main_action);
-  }
+      mydata += cnt;
+      cnt++;
 
-  // process
-  void main_action();
+      bus_port->write(m_unique_priority, &mydata, addr, m_lock);
+      while ((bus_port->get_status(m_unique_priority) != SIMPLE_BUS_OK) &&
+	     (bus_port->get_status(m_unique_priority) != SIMPLE_BUS_ERROR))
+	wait();
+      if (bus_port->get_status(m_unique_priority) == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%s %s : ERROR cannot write to %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), addr);
+ 
+      wait(m_timeout, SC_NS);
+      wait(); // ... for the next rising clock edge
 
-private:
-  unsigned int m_address;
-  int m_timeout;
-  bool m_verbose;
-
-}; // end class simple_bus_master_direct
-
-#endif
+      addr+=4; // next word (byte addressing)
+      if (addr > (m_start_address+0x80)) {
+        addr = m_start_address; cnt = 0;
+      }
+    }
+}

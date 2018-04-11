@@ -19,8 +19,7 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_request.h : The bus interface request form.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +35,42 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#ifndef __simple_bus_request_h
+#define __simple_bus_request_h
 
-#include <systemc.h>
+enum simple_bus_lock_status { SIMPLE_BUS_LOCK_NO = 0
+			      , SIMPLE_BUS_LOCK_SET
+			      , SIMPLE_BUS_LOCK_GRANTED 
+};
 
-#include "simple_bus_direct_if.h"
-
-
-SC_MODULE(simple_bus_master_direct)
+struct simple_bus_request
 {
-  // ports
-  sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
+  // parameters
+  unsigned int priority;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
+  // request parameters
+  bool do_write;
+  unsigned int address;
+  unsigned int end_address;
+  int *data;
+  simple_bus_lock_status lock;
 
-  // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
-    : sc_module(name_)
-    , m_address(address)
-    , m_timeout(timeout)
-    , m_verbose(verbose)
-  {
-    // process declaration
-    SC_THREAD(main_action);
-  }
+  // request status
+  sc_event transfer_done;
+  simple_bus_status status;
 
-  // process
-  void main_action();
+  // default constructor
+  simple_bus_request();
+};
 
-private:
-  unsigned int m_address;
-  int m_timeout;
-  bool m_verbose;
-
-}; // end class simple_bus_master_direct
+inline simple_bus_request::simple_bus_request()
+  : priority(0)
+  , do_write(false)
+  , address(0)
+  , end_address(0)
+  , data((int *)0)
+  , lock(SIMPLE_BUS_LOCK_NO)
+  , status(SIMPLE_BUS_OK)
+{}
 
 #endif

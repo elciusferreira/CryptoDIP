@@ -19,8 +19,7 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_arbiter.h : The arbitration unit.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +35,33 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#ifndef __simple_bus_arbiter_h
+#define __simple_bus_arbiter_h
 
 #include <systemc.h>
 
-#include "simple_bus_direct_if.h"
+#include "simple_bus_types.h"
+#include "simple_bus_request.h"
+#include "simple_bus_arbiter_if.h"
 
 
-SC_MODULE(simple_bus_master_direct)
+class simple_bus_arbiter
+  : public simple_bus_arbiter_if
+  , public sc_module
 {
-  // ports
-  sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
-
-  SC_HAS_PROCESS(simple_bus_master_direct);
-
+public:
   // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
+  simple_bus_arbiter(sc_module_name name_
+                     , bool verbose = false)
     : sc_module(name_)
-    , m_address(address)
-    , m_timeout(timeout)
     , m_verbose(verbose)
-  {
-    // process declaration
-    SC_THREAD(main_action);
-  }
+  {}
 
-  // process
-  void main_action();
+  simple_bus_request *arbitrate(const simple_bus_request_vec &requests);
 
 private:
-  unsigned int m_address;
-  int m_timeout;
   bool m_verbose;
 
-}; // end class simple_bus_master_direct
+}; // end class simple_bus_arbiter
 
 #endif

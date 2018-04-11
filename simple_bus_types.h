@@ -19,8 +19,7 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_types.h : The common types.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +35,23 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#ifndef __simple_bus_types_h
+#define __simple_bus_types_h
 
+#include <stdio.h>
 #include <systemc.h>
 
-#include "simple_bus_direct_if.h"
+enum simple_bus_status { SIMPLE_BUS_OK = 0
+			 , SIMPLE_BUS_REQUEST
+			 , SIMPLE_BUS_WAIT
+			 , SIMPLE_BUS_ERROR };
 
+// needed for more readable debug output
+extern char simple_bus_status_str[4][20]; 
 
-SC_MODULE(simple_bus_master_direct)
-{
-  // ports
-  sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
+struct simple_bus_request;
+typedef std::vector<simple_bus_request *> simple_bus_request_vec;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
-
-  // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
-    : sc_module(name_)
-    , m_address(address)
-    , m_timeout(timeout)
-    , m_verbose(verbose)
-  {
-    // process declaration
-    SC_THREAD(main_action);
-  }
-
-  // process
-  void main_action();
-
-private:
-  unsigned int m_address;
-  int m_timeout;
-  bool m_verbose;
-
-}; // end class simple_bus_master_direct
+extern int sb_fprintf(FILE *, const char *, ...);
 
 #endif

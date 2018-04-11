@@ -19,8 +19,7 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_master_blocking.cpp : The master using the blocking BUS interface.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +35,36 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#include "simple_bus_master_blocking.h"
 
-#include <systemc.h>
-
-#include "simple_bus_direct_if.h"
-
-
-SC_MODULE(simple_bus_master_direct)
+void simple_bus_master_blocking::main_action()
 {
-  // ports
-  sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
+  const unsigned int mylength = 0x10; // storage capacity/burst length in words
+  int mydata[mylength];
+  unsigned int i;
+  simple_bus_status status;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
+  while (true)
+    {
+      wait(); // ... for the next rising clock edge
+      status = bus_port->burst_read(m_unique_priority, mydata, 
+				    m_address, mylength, m_lock);
+      if (status == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%s %s : blocking-read failed at address %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), m_address);
 
-  // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
-    : sc_module(name_)
-    , m_address(address)
-    , m_timeout(timeout)
-    , m_verbose(verbose)
-  {
-    // process declaration
-    SC_THREAD(main_action);
-  }
+      for (i = 0; i < mylength; ++i)
+	{
+	  mydata[i] += i;
+	  wait();
+	}
 
-  // process
-  void main_action();
+      status = bus_port->burst_write(m_unique_priority, mydata, 
+				     m_address, mylength, m_lock);
+      if (status == SIMPLE_BUS_ERROR)
+	sb_fprintf(stdout, "%s %s : blocking-write failed at address %x\n",
+		   sc_time_stamp().to_string().c_str(), name(), m_address);
 
-private:
-  unsigned int m_address;
-  int m_timeout;
-  bool m_verbose;
-
-}; // end class simple_bus_master_direct
-
-#endif
+      wait(m_timeout, SC_NS);
+    }
+}

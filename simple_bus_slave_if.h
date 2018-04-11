@@ -19,8 +19,7 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_slave_if.h : The Slave interface.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +35,26 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#ifndef __simple_bus_slave_if_h
+#define __simple_bus_slave_if_h
 
 #include <systemc.h>
 
+#include "simple_bus_types.h"
 #include "simple_bus_direct_if.h"
 
 
-SC_MODULE(simple_bus_master_direct)
+class simple_bus_slave_if
+  : public simple_bus_direct_if
 {
-  // ports
-  sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
+public:
+  // Slave interface
+  virtual simple_bus_status read(int *data, unsigned int address) = 0;
+  virtual simple_bus_status write(int *data, unsigned int address) = 0;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
+  virtual unsigned int start_address() const = 0;
+  virtual unsigned int end_address() const = 0;
 
-  // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
-    : sc_module(name_)
-    , m_address(address)
-    , m_timeout(timeout)
-    , m_verbose(verbose)
-  {
-    // process declaration
-    SC_THREAD(main_action);
-  }
-
-  // process
-  void main_action();
-
-private:
-  unsigned int m_address;
-  int m_timeout;
-  bool m_verbose;
-
-}; // end class simple_bus_master_direct
+}; // end class simple_bus_slave_if
 
 #endif

@@ -19,8 +19,8 @@
 
 /*****************************************************************************
  
-  simple_bus_master_direct.h : The monitor (master) using the direct BUS
-                               interface.
+  simple_bus_master_non_blocking.h : The master using the non-blocking BUS
+                                     interface.
  
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
@@ -36,44 +36,49 @@
  
  *****************************************************************************/
 
-#ifndef __simple_bus_master_direct_h
-#define __simple_bus_master_direct_h
+#ifndef __simple_bus_master_non_blocking_h
+#define __simple_bus_master_non_blocking_h
 
 #include <systemc.h>
 
-#include "simple_bus_direct_if.h"
+#include "simple_bus_types.h"
+#include "simple_bus_non_blocking_if.h"
 
 
-SC_MODULE(simple_bus_master_direct)
+SC_MODULE(simple_bus_master_non_blocking)
 {
   // ports
   sc_in_clk clock;
-  sc_port<simple_bus_direct_if> bus_port;
+  sc_port<simple_bus_non_blocking_if> bus_port;
 
-  SC_HAS_PROCESS(simple_bus_master_direct);
+  SC_HAS_PROCESS(simple_bus_master_non_blocking);
 
   // constructor
-  simple_bus_master_direct(sc_module_name name_
-                           , unsigned int address
-                           , int timeout
-                           , bool verbose = true)
-    : sc_module(name_)
-    , m_address(address)
+  simple_bus_master_non_blocking(sc_module_name _name
+				 , unsigned int unique_priority
+                                 , unsigned int start_address
+                                 , bool lock
+                                 , int timeout)
+    : sc_module(_name)
+    , m_unique_priority(unique_priority)
+    , m_start_address(start_address)
+    , m_lock(lock)
     , m_timeout(timeout)
-    , m_verbose(verbose)
   {
     // process declaration
     SC_THREAD(main_action);
+    sensitive << clock.pos();
   }
-
+  
   // process
   void main_action();
 
 private:
-  unsigned int m_address;
+  unsigned int m_unique_priority;
+  unsigned int m_start_address;
+  bool m_lock;
   int m_timeout;
-  bool m_verbose;
 
-}; // end class simple_bus_master_direct
+}; // end class simple_bus_master_non_blocking
 
 #endif
