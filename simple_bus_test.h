@@ -40,15 +40,16 @@
 
 #include <systemc.h>
 
+#include "simple_bus.h"
 #include "simple_bus_master_blocking.h"
 #include "simple_bus_master_non_blocking.h"
 #include "simple_bus_master_gerad.h"
 #include "simple_bus_encryption.h"
-#include "simple_bus_slow_mem.h"
-#include "simple_bus.h"
-#include "simple_bus_fast_mem.h"
+#include "simple_bus_gpu.h"
 #include "simple_bus_arbiter.h"
 #include "simple_bus_master_com.h"
+#include "simple_bus_slow_mem.h"
+#include "simple_bus_fast_mem.h"
 
 SC_MODULE(simple_bus_test)
 {
@@ -57,59 +58,64 @@ SC_MODULE(simple_bus_test)
 
   // module instances
   simple_bus_encryption          *master_encryption;
-  simple_bus_master_com         *master_comunication;
-  simple_bus_master_gerad       *master_generator;
+  simple_bus_master_com          *master_communication;
+  simple_bus_master_gerad        *master_generator;
+  simple_bus_gpu                 *master_gpu;
   simple_bus                     *bus;
   simple_bus                     *bus_intern;
-  simple_bus                     *bus_comunication;
+  simple_bus                     *bus_communication;
   simple_bus_fast_mem            *mem_fast;
   simple_bus_fast_mem            *mem_fast_intern;
   simple_bus_arbiter             *arbiter;
   simple_bus_arbiter             *arbiter_intern;
-  simple_bus_arbiter             *arbiter_comunication;
+  simple_bus_arbiter             *arbiter_communication;
 
   // constructor
   SC_CTOR(simple_bus_test)
     : C1("C1")
   {
     // create instances
-    master_generator = new simple_bus_master_gerad("master_generator", 40, 120, "ouput.txt", 1);
-    master_comunication = new simple_bus_master_com("master_comunication", 40, 120, 8, 0, 127, 25);
-    master_encryption = new simple_bus_encryption("master_encryption", 0, 4, 8, 100, 50);
+    master_generator = new simple_bus_master_gerad("master_generator", 0, 127, 10);
+    master_communication = new simple_bus_master_com("master_communication", 0, 16383, 8, 12, 16, 0, 127, 50);
+    master_encryption = new simple_bus_encryption("master_encryption", 0, 4, 8, 12, 50, 10);
+    master_gpu = new simple_bus_gpu("master_gpu", 0, 4240, 12, 4096, 50);
     mem_fast = new simple_bus_fast_mem("mem_fast", 0, 16383);
     mem_fast_intern = new simple_bus_fast_mem("mem_fast_temp", 0, 1043);
-    bus = new simple_bus("bus",true); // verbose output
+    bus = new simple_bus("bus", true); // verbose output
     bus_intern = new simple_bus("bus_intern", true);
-    bus_comunication = new simple_bus("bus_comunication", true);
-    arbiter = new simple_bus_arbiter("arbiter",true); // verbose output
-    arbiter_intern = new simple_bus_arbiter("arbiter_intern",true); 
-    arbiter_comunication = new simple_bus_arbiter("arbiter_comunication",true); 
+    bus_communication = new simple_bus("bus_communication", true);
+    arbiter = new simple_bus_arbiter("arbiter", true); // verbose output
+    arbiter_intern = new simple_bus_arbiter("arbiter_intern", true);
+    arbiter_communication = new simple_bus_arbiter("arbiter_communication", true);
 
     // connect instances
     master_encryption->clock(C1);
-    master_comunication->clock(C1);
+    master_communication->clock(C1);
     master_generator->clock(C1);
+    master_gpu->clock(C1);
     bus->clock(C1);
     bus_intern->clock(C1);
-    bus_comunication->clock(C1);
+    bus_communication->clock(C1);
     master_encryption->bus_port(*bus);
     master_encryption->bus_port_intern(*bus_intern);
-    master_comunication->bus_port(*bus);
-    master_generator->bus_port(*bus_comunication);
+    master_communication->bus_port(*bus);
+    master_generator->bus_port(*bus_communication);
+    master_gpu->bus_port(*bus);
     bus->arbiter_port(*arbiter);
     bus->slave_port(*mem_fast);
     bus_intern->arbiter_port(*arbiter);
     bus_intern->slave_port(*mem_fast_intern);
-    bus_comunication->arbiter_port(*arbiter_comunication);
-    bus_comunication->slave_port(*master_comunication);
+    bus_communication->arbiter_port(*arbiter_communication);
+    bus_communication->slave_port(*master_communication);
   }
 
   // destructor
   ~simple_bus_test()
   {
     if (master_encryption) {delete master_encryption; master_encryption = 0;}
-    if (master_comunication){delete master_comunication; master_comunication = 0;}
+    if (master_communication){delete master_communication; master_communication = 0;}
     if (master_generator){delete master_generator; master_generator = 0;}
+    if (master_gpu){delete master_gpu; master_gpu = 0;}
     if (bus) {delete bus; bus = 0;}
     if (bus_intern) {delete bus_intern; bus_intern = 0;}
     if (mem_fast) {delete mem_fast; mem_fast = 0;}

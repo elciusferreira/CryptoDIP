@@ -25,7 +25,7 @@
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
  
  *****************************************************************************/
- 
+
 /*****************************************************************************
  
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
@@ -40,132 +40,139 @@
 #include "simple_bus_types.h"
 
 
-void simple_bus_encryption::main_action()
-{
-  int *control = new int;
+void simple_bus_encryption::main_action() {
+    int *control = new int;
 
-  while(true){
-    bus_port->direct_read(control, m_address_reserved);
-    sb_fprintf(stdout, "CRIPT-> TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), *control);
-    
-    if(*control == 1){
-      sb_fprintf(stdout, " CAN WORK!!!\n");
-      *control = 0;
-      bus_port->direct_write(control, m_address_reserved);
+    while (true) {
+        bus_port->direct_read(control, m_address_reserved);
+        sb_fprintf(stdout, "[CRIPT] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), *control);
 
-      sb_fprintf(stdout, "S: %d E: %d R: %d!!!\n",m_address_start, m_address_end, m_address_reserved);
-      getRange();
+        if (*control == 1) {
+            sb_fprintf(stdout, " CAN WORK!!!\n");
+            *control = 0;
+            bus_port->direct_write(control, m_address_reserved);
 
-      seeMemory();
-      KSA();
-      PRGA();
-      
-      seeMemory();
-      KSA();
-      PRGA();
+            sb_fprintf(stdout, "S: %d E: %d R: %d!!!\n", m_address_start, m_address_end, m_address_reserved);
+            getRange();
 
-      seeMemory();      
+            seeMemory();
+            KSA();
+            PRGA();
+
+            seeMemory();
+            KSA();
+            PRGA();
+
+            seeMemory();
+
+            *control = 1;
+            bus_port->direct_write(control, m_address_graphs);
+            sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+                       sc_time_stamp().to_string().c_str(),
+                       m_address_graphs,
+                       *control);
+            wait(m_timeout, SC_NS);
+
+        } else {
+            sb_fprintf(stdout, " CANT WORK!!!\n");
+        }
+        wait(m_timeout, SC_NS);
     }
-    else{
-      sb_fprintf(stdout, " CANT WORK!!!\n");
+}
+
+void simple_bus_encryption::getRange() {
+    int *value = new int;
+    bus_port->direct_read(value, m_address_start);
+    address_read_start = *value;
+
+    bus_port->direct_read(value, m_address_end);
+    address_read_end = *value;
+    delete value;
+}
+
+void simple_bus_encryption::KSA() {
+    sb_fprintf(stdout, "[CRIPT] SETUP CRIPT\n");
+    unsigned int positionMemory;
+    unsigned int i = 0;
+    unsigned int j = 0;
+    int position = 0;
+    int *values = new int;
+
+    for (positionMemory = 0; positionMemory < size_key * 4; positionMemory = positionMemory + 4) {
+        bus_port_intern->direct_write(&key_c[position], positionMemory);
+        position++;
     }
-    wait(m_timeout, SC_NS);
-  }
+
+    position = 0;
+    for (i = positionMemory; i < positionMemory + 256 * 4; i = i + 4) {
+        *values = position;
+        bus_port_intern->direct_write(values, i);
+        position++;
+    }
+
+    position = 0;
+    for (i = positionMemory; i < positionMemory + 256 * 4; i = i + 4) {
+        bus_port_intern->direct_read(values, i);
+
+        j = ((j + *values + key_c[position % size_key]) % 256) * 4;
+        change(i, j);
+
+        position++;
+    }
+
+    delete values;
+    sb_fprintf(stdout, "[CRIPT] SETUP CRIPT\n");
 }
 
-void simple_bus_encryption::getRange(){
-  int *value = new int;
-  bus_port->direct_read(value, m_address_start);
-  address_read_start = *value;
-
-  bus_port->direct_read(value, m_address_end);
-  address_read_end = *value;
-  delete value;
+void simple_bus_encryption::PRGA() {
+    sb_fprintf(stdout, "[CRIPT] PRGA BEGIN\n");
+    int *valuesI = new int();
+    int *valuesJ = new int();
+    int *result = new int();
+    unsigned int posicao;
+    unsigned int aux;
+    unsigned int i = address_read_start, j = address_read_start;
+    for (aux = address_read_start; aux < address_read_end; aux = aux + 4) {
+        i = ((i + 1) % 256) * 4;
+        bus_port_intern->direct_read(valuesI, i);
+        j = ((j + *valuesI) % 256) * 4;
+        change(i, j);
+        bus_port_intern->direct_read(valuesI, i);
+        bus_port_intern->direct_read(valuesJ, j);
+        posicao = ((*valuesI + *valuesJ) % 256) * 4;
+        bus_port->direct_read(valuesI, aux);
+        bus_port_intern->direct_read(valuesJ, posicao);
+        *result = *valuesI ^ *valuesJ;
+        bus_port->direct_write(result, aux);
+    }
+    delete valuesI;
+    delete valuesJ;
+    delete result;
+    sb_fprintf(stdout, "[CRIPT] PRGA END\n");
 }
 
-void simple_bus_encryption::KSA(){
-  sb_fprintf(stdout, "SETUP CRIPT\n");
-  unsigned int positionMemory;
-  unsigned int i = 0;
-  unsigned int j = 0;
-  int position = 0;
-  int *values = new int;
-
-  for(positionMemory = 0 ; positionMemory < size_key*4; positionMemory= positionMemory+4){
-    bus_port_intern->direct_write(&key_c[position], positionMemory);
-    position++;
-  }
-
-  position = 0;
-  for(i = positionMemory; i < positionMemory+256*4; i = i+4){
-    *values = position;
-    bus_port_intern->direct_write(values, i);
-    position++;
-  }
-
-  position = 0;
-  for(i = positionMemory; i < positionMemory+256*4; i = i+4){
-    bus_port_intern->direct_read(values, i);
-
-    j = ((j + *values + key_c[position % size_key]) % 256)*4;
-    change(i,j);
-
-    position++;
-  }
-
-  delete values;  
-  sb_fprintf(stdout, "SETUP CRIPT\n");
+void simple_bus_encryption::change(unsigned int i, unsigned int j) {
+    int *aux = new int;
+    int si;
+    bus_port_intern->direct_read(aux, i);
+    si = *aux;
+    bus_port_intern->direct_read(aux, j);
+    bus_port_intern->direct_write(aux, i);
+    *aux = si;
+    bus_port_intern->direct_write(aux, j);
+    delete aux;
 }
 
-void simple_bus_encryption::PRGA(){
-  sb_fprintf(stdout, "PRGA BEGIN\n");
-  int *valuesI = new int();
-  int *valuesJ = new int();
-  int *result = new int();
-  unsigned int posicao;
-  unsigned int aux;
-  unsigned int i= address_read_start, j= address_read_start;
-  for(aux = address_read_start; aux < address_read_end; aux = aux+4){
-    i = ((i+1)%256)*4;
-    bus_port_intern->direct_read(valuesI,i);
-    j = ((j + *valuesI)%256)*4;
-    change(i,j);
-    bus_port_intern->direct_read(valuesI,i);
-    bus_port_intern->direct_read(valuesJ,j);
-    posicao = ((*valuesI + *valuesJ)%256)*4;
-    bus_port->direct_read(valuesI, aux);
-    bus_port_intern->direct_read(valuesJ, posicao);
-    *result = *valuesI ^ *valuesJ;
-    bus_port->direct_write(result, aux);
-  }
-  delete valuesI;
-  delete valuesJ;
-  delete result;
-  sb_fprintf(stdout, "PRGA END\n");
-}
-
-void simple_bus_encryption::change(unsigned int i, unsigned int j){
-  int *aux = new int;
-  int si;
-  bus_port_intern->direct_read(aux, i);
-  si = *aux;
-  bus_port_intern->direct_read(aux, j);
-  bus_port_intern->direct_write(aux, i);
-  *aux = si;
-  bus_port_intern->direct_write(aux, j);
-  delete aux;
-}
-
-void simple_bus_encryption::seeMemory(){
-  int *values = new int;
-  sb_fprintf(stdout, "START SEE MEMORY\n");
-  for(unsigned int i = address_read_start; i< address_read_end; i= i+4){
-    bus_port->direct_read(values, i);
-    sb_fprintf(stdout, "M-> %s MEMORY: %d  VALUE:%d\n",sc_time_stamp().to_string().c_str(), i,*values);  
-    wait(0, SC_NS);
-  }
-  delete values;
-  sb_fprintf(stdout, "FINISH SEE MEMORY\n");
+void simple_bus_encryption::seeMemory() {
+    int *values = new int;
+    sb_fprintf(stdout, "[CRIPT] START SEE MEMORY\n");
+    for (unsigned int i = address_read_start; i < address_read_end; i = i + 4) {
+        bus_port->direct_read(values, i);
+        sb_fprintf(stdout, "M-> %s MEMORY: %d  VALUE:%d\n", sc_time_stamp().to_string().c_str(), i, *values);
+        wait(0, SC_NS);
+    }
+    delete values;
+    sb_fprintf(stdout, "[CRIPT] FINISH SEE MEMORY\n");
 }
 
 

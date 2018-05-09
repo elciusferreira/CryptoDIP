@@ -22,7 +22,9 @@ public:
   simple_bus_master_com(sc_module_name name_
                            , unsigned int address_start
                            , unsigned int address_end
-                           , unsigned int address_reserved
+                           , unsigned int address_cryption
+                           , unsigned int address_graphics
+                           , unsigned int address_width
                            , unsigned int start_address_intern_mem
                            , unsigned int end_address_intern_mem
                            , int timeout
@@ -30,7 +32,9 @@ public:
     : sc_module(name_)
     , m_address_start(address_start)
     , m_address_end(address_end)
-    , m_address_reserved(address_reserved)
+    , m_address_cryption(address_cryption)
+    , m_address_graphics(address_graphics)
+    , m_address_width(address_width)
     , m_start_address_intern_memory(start_address_intern_mem)
     , m_end_address_intern_memory(end_address_intern_mem)
     , m_timeout(timeout)
@@ -66,7 +70,7 @@ public:
   ~simple_bus_master_com();
   
 private:
-  unsigned int m_address_start, m_address_end, m_address_reserved;
+  unsigned int m_address_start, m_address_end, m_address_cryption, m_address_graphics, m_address_width;
   unsigned int m_start_address_intern_memory, m_end_address_intern_memory;
   int m_timeout;
   bool m_verbose;

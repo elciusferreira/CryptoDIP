@@ -58,6 +58,7 @@ SC_MODULE(simple_bus_encryption)
                            , unsigned int address_start
                            , unsigned int address_end
                            , unsigned int address_reserved
+                           , unsigned int address_graphs
                            , int timeout
                            , int timeout_internal
                            , bool verbose = true)
@@ -65,6 +66,7 @@ SC_MODULE(simple_bus_encryption)
     , m_address_start(address_start)
     , m_address_end(address_end)
     , m_address_reserved(address_reserved)
+    , m_address_graphs(address_graphs)
     , m_timeout(timeout)
     , m_timeout_internal(timeout_internal)
     , m_verbose(verbose)
@@ -81,7 +83,7 @@ SC_MODULE(simple_bus_encryption)
   void main_action();
   
 private:
-  unsigned int m_address_start, m_address_end, m_address_reserved;
+  unsigned int m_address_start, m_address_end, m_address_reserved, m_address_graphs;
   unsigned int address_read_start, address_read_end;
   int m_timeout, m_timeout_internal;
   bool m_verbose;

@@ -13,8 +13,9 @@
 
 SC_MODULE(simple_bus_gpu) {
 private:
-    unsigned int m_rd_addr;
-    unsigned int m_wr_addr;
+    unsigned int im_addr;
+    unsigned int wr_addr;
+    unsigned int flag_addr;
     int m_max_size;
     int m_timeout;
     bool m_verbose;
@@ -30,8 +31,9 @@ public:
 
     explicit simple_bus_gpu(sc_module_name name_)
     {
-        m_rd_addr = 0x80;
-        m_wr_addr = 0x1090;
+        im_addr = 0x00;
+        wr_addr = 0x1090;
+        flag_addr = 0x0C;
         m_max_size = 4096;
         m_timeout = 100;
         m_verbose = false;
@@ -40,15 +42,17 @@ public:
     }
 
     simple_bus_gpu(sc_module_name name_,
-                      unsigned int rd_addr,
-                      unsigned int wr_addr,
+                      unsigned int image_address,
+                      unsigned int write_address,
+                      unsigned int flag_address,
                       int max_size = 4096,
                       int timeout = 100,
-                      bool verbose = false,
+                      bool verbose = true,
                       bool test = false)
             :sc_module(name_),
-             m_rd_addr(rd_addr),
-             m_wr_addr(wr_addr),
+             im_addr(image_address),
+             wr_addr(write_address),
+             flag_addr(flag_address),
              m_max_size(max_size),
              m_timeout(timeout),
              m_verbose(verbose),
