@@ -10,7 +10,7 @@ void simple_bus_master_com::main_action() {
         sb_fprintf(stdout, "[COMUNICATION] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), read_en);
 
         if (read_en == 1) {
-            for (unsigned int i = m_start_address_intern_memory +4; i < m_end_address_intern_memory; i = i + 4) {
+            for (unsigned int i = m_start_address_intern_memory +4; i < m_end_address_intern_memory; i += 4) {
                 read(&mydata, i);
                 bus_port->direct_write(&mydata, i + 20);
                 sb_fprintf(stdout, "[COMUNICATION] Read/Write TIME: %s READ FROM: %d VALUE: %d\n",

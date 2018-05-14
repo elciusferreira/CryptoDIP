@@ -181,6 +181,7 @@ public:
             g = elements.at(i).getG();
             b = elements.at(i).getB();
             a = elements.at(i).getA();
+
             char components[4];
             components[0] = elements.at(i).getR();
             components[1] = elements.at(i).getG();
