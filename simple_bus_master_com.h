@@ -6,6 +6,7 @@
 #include "simple_bus_types.h"
 #include "simple_bus_slave_if.h"
 #include "simple_bus_direct_if.h"
+#include <vector>
 
 class simple_bus_master_com
   : public simple_bus_slave_if
@@ -68,7 +69,7 @@ public:
 
   // destructor
   ~simple_bus_master_com();
-  
+
 private:
   unsigned int m_address_start, m_address_end, m_address_cryption, m_address_graphics, m_address_width;
   unsigned int m_start_address_intern_memory, m_end_address_intern_memory;

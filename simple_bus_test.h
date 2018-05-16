@@ -18,21 +18,21 @@
  *****************************************************************************/
 
 /*****************************************************************************
- 
+
   simple_bus_test.h : The test bench.
- 
+
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
- 
+
  *****************************************************************************/
- 
+
 /*****************************************************************************
- 
+
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
- 
+
       Name, Affiliation, Date:
   Description of Modification:
- 
+
  *****************************************************************************/
 
 #ifndef __simple_bus_test_h
@@ -76,8 +76,8 @@ SC_MODULE(simple_bus_test)
   {
     // create instances
     master_generator = new simple_bus_master_gerad("master_generator", 0, 127, 10);
-    master_communication = new simple_bus_master_com("master_communication", 0, 16383, 8, 12, 16, 0, 127, 50);
-    master_encryption = new simple_bus_encryption("master_encryption", 0, 4, 8, 12, 50, 10);
+    master_communication = new simple_bus_master_com("master_communication", 0, 16383, 8, 12, 16, 0, 75, 10);
+    master_encryption = new simple_bus_encryption("master_encryption", 0, 4, 8, 12, 50, 50);
     master_gpu = new simple_bus_gpu("master_gpu", 0, 4240, 12, 4096, 50);
     mem_fast = new simple_bus_fast_mem("mem_fast", 0, 16383);
     mem_fast_intern = new simple_bus_fast_mem("mem_fast_temp", 0, 1043);

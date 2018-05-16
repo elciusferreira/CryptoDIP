@@ -10,9 +10,14 @@ std::vector<std::string> Process_file(std::string file_name)
     std::ifstream input(file_name.c_str());
     std::string line;
 
-    while (getline(input, line)){
+    /*while (getline(input, line)){
         //sb_fprintf(stdout, "%s\n", line.c_str());
         lines.push_back(line);
+    }*/
+
+    std::string test1 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0";
+    for (int i = 0; i < 1 ;  i++){
+        lines.push_back(test1);
     }
 
     return lines;
@@ -83,6 +88,10 @@ std::vector<int> Gen_stream(const std::string crc,
 void simple_bus_master_gerad::main_action() {
     sb_fprintf(stdout, "GENERATOR START!\n");
     int flag;
+    int flags;
+
+    flag = 0;
+    bus_port->direct_write(&flag, 0);
 
     std::vector<std::string> file = Process_file("../generator/ouput.txt");
 
@@ -101,6 +110,11 @@ void simple_bus_master_gerad::main_action() {
 
         // e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0
         //std::string line = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0";
+        if (file.size() == 0) {
+            flags = 1;
+            bus_port->direct_write(&flags, 4);
+            wait(m_timeout*200, SC_NS);
+        }
         std::string line = file.at(0);
         file.erase(file.begin());
         int size = line.length();
@@ -146,9 +160,9 @@ void simple_bus_master_gerad::main_action() {
 
         std::vector<int> data = Gen_stream(crc, r, g, b, a);
 
-        // SAVE MEMORY
+        // SAVE IN MEMORY
         int value;
-        unsigned int address = m_address_start + 4;
+        unsigned int address = m_address_start + 8;
         for (std::vector<int>::iterator it = data.begin(); it != data.end(); it++){
             value = *it;
             bus_port->direct_write(&value, address);
@@ -163,5 +177,6 @@ void simple_bus_master_gerad::main_action() {
         }
         flag = 1;
         bus_port->direct_write(&flag, 0);
+        wait(m_timeout, SC_NS);
     }
 }

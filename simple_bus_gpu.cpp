@@ -28,7 +28,7 @@ void simple_bus_gpu::main_action() {
                     bus_port->direct_read(&bufferA[i+4], rd_addr + i*4 + 4);
                     bus_port->direct_read(&bufferA[i+8], rd_addr + i*4 + 8);
                     bus_port->direct_read(&bufferA[i+12], rd_addr + i*4 + 12);
-                    wait(m_timeout, SC_NS);
+                    //wait(m_timeout, SC_NS);
                 }
 
                 // Write pixels in order to rotate image in Buffer B
@@ -68,7 +68,7 @@ void simple_bus_gpu::main_action() {
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4 + 4);
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4 + 8);
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4 + 12);
-                    wait(m_timeout, SC_NS);
+                    //wait(m_timeout, SC_NS);
                 }
 
                 if (m_verbose) {

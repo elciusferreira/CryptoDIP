@@ -18,22 +18,22 @@
  *****************************************************************************/
 
 /*****************************************************************************
- 
+
   simple_bus_master_direct.cpp : The monitor (master) using the direct BUS
                                  interface.
- 
+
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
- 
+
  *****************************************************************************/
 
 /*****************************************************************************
- 
+
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
- 
+
       Name, Affiliation, Date:
   Description of Modification:
- 
+
  *****************************************************************************/
 
 #include "simple_bus_encryption.h"
@@ -55,11 +55,11 @@ void simple_bus_encryption::main_action() {
             sb_fprintf(stdout, "S: %d E: %d R: %d!!!\n", m_address_start, m_address_end, m_address_reserved);
             getRange();
 
-            seeMemory();
-            KSA();
-            PRGA();
+            //seeMemory();
+            //KSA();
+            //PRGA();
 
-            seeMemory();
+            //seeMemory();
             KSA();
             PRGA();
 
@@ -174,5 +174,3 @@ void simple_bus_encryption::seeMemory() {
     delete values;
     sb_fprintf(stdout, "[CRIPT] FINISH SEE MEMORY\n");
 }
-
-
