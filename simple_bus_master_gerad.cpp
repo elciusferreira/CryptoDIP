@@ -24,7 +24,7 @@ std::vector<std::string> Process_file(std::string file_name)
 }
 
 
-int stoi(const std::string str){
+int inline stoi(const std::string str){
     //std::string str = "123";
     int num;
     std::istringstream(str) >> num;
