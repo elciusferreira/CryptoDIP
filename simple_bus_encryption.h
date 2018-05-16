@@ -18,22 +18,22 @@
  *****************************************************************************/
 
 /*****************************************************************************
- 
+
   simple_bus_master_direct.h : The monitor (master) using the direct BUS
                                interface.
- 
+
   Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
- 
+
  *****************************************************************************/
- 
+
 /*****************************************************************************
- 
+
   MODIFICATION LOG - modifiers, enter your name, affiliation, date and
   changes you are making here.
- 
+
       Name, Affiliation, Date:
   Description of Modification:
- 
+
  *****************************************************************************/
 
 #ifndef __simple_bus_encryption_h
@@ -73,15 +73,17 @@ SC_MODULE(simple_bus_encryption)
   {
     // process declaration
     size_key = 5;
-    
+
     for(int i =0 ; i < 5; i++)
-      key_c[i] = i*50;
+      //key_c[i] = i*50;
+      key_c[i] = (i*12+70)%256;
+
     SC_THREAD(main_action);
   }
 
   // process
   void main_action();
-  
+
 private:
   unsigned int m_address_start, m_address_end, m_address_reserved, m_address_graphs;
   unsigned int address_read_start, address_read_end;
@@ -89,11 +91,13 @@ private:
   bool m_verbose;
   unsigned int size_key;
   int key_c[5];
-  
+  int s[256];
+
   // private process
   void KSA();
   void PRGA();
   void change(unsigned int i, unsigned int j);
+  void changee(int i, int j);
   void getRange();
   void seeMemory();
 

@@ -22,15 +22,14 @@ int inline stoi(const std::string str){
 // Calculate packet CRC
 std::string simple_bus_master_com::crc_generator(int red, int green, int blue, int alpha) {
     std::string crc;
-    char components[4];
-    // components[0] = red;
-    // components[1] = green;
-    // components[2] = blue;
-    // components[3] = alpha;
-    components[0] = char(135);
-    components[1] = char(135);
-    components[2] = char(135);
-    components[3] = char(135);
+
+    std::string pixels;
+    pixels += char(red);
+    pixels += char(green);
+    pixels += char(blue);
+    pixels += char(alpha);
+
+    const char *components = pixels.c_str();
 
     unsigned char digest[SHA256_DIGEST_LENGTH];
 
@@ -39,45 +38,26 @@ std::string simple_bus_master_com::crc_generator(int red, int green, int blue, i
     SHA256_Update(&ctx, components, strlen(components));
     SHA256_Final(digest, &ctx);
 
-    sb_fprintf(stdout, "[COMUNICATION][CRC GENERATOR] STRLEN: %i\n", strlen(components));
+    //sb_fprintf(stdout, "[COMUNICATION][CRC GENERATOR] STRLEN: %i\n", strlen(components));
 
     char* SHAString = new char[SHA256_DIGEST_LENGTH*2+1];
     for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
         sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
 
-        sb_fprintf(stdout, "[COMUNICATION][CRC GENERATOR] -> CRC %s, RED: %i, GREEN: %i, BLUE: %i, ALPHA: %i, RED_CHAR: %u TIME: %s\n"
-                   , SHAString, red, green, blue, alpha, int(components[0]) & 0xff, sc_time_stamp().to_string().c_str());
+        // sb_fprintf(stdout, "[COMUNICATION][CRC GENERATOR] -> CRC %s, RED: %i, GREEN: %i, BLUE: %i, ALPHA: %i, RED_CHAR: %u TIME: %s\n"
+        //            , SHAString, red, green, blue, alpha, int(components[0]) & 0xff, sc_time_stamp().to_string().c_str());
 
-   sb_fprintf(stdout, "\n------> AQUI: ");
+   //sb_fprintf(stdout, "\n------> AQUI: ");
 
-   for (unsigned int b = 0; b < strlen(components); b++)
-       sb_fprintf(stdout, "%c", components[b]);
-   sb_fprintf(stdout, "\n");
+   // for (unsigned int b = 0; b < strlen(components); b++)
+   //     sb_fprintf(stdout, "%c", components[b]);
+   // sb_fprintf(stdout, "\n");
 
 
     return SHAString;
-    // unsigned char digest[SHA256_DIGEST_LENGTH];
-    // const char* string = "hello world";
-    //
-    // SHA256_CTX ctx;
-    // SHA256_Init(&ctx);
-    // SHA256_Update(&ctx, string, strlen(string));
-    // SHA256_Final(digest, &ctx);
-    //
-    // char mdString[SHA256_DIGEST_LENGTH*2+1];
-    // for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
-    //     sprintf(&mdString[i*2], "%02x", (unsigned int)digest[i]);
-    //
-    // sb_fprintf(stdout, "\n------> AQUI: ");
-    //
-    // for (unsigned int b = 0; b < strlen(string); b++)
-    //     sb_fprintf(stdout, "%c", string[b]);
-    // sb_fprintf(stdout, "\n");
-    //
-    // return mdString;
 }
 std::vector<std::string> decode(std::vector<int> code){
-    std::string crc, r, g, b, a;
+    std::string crc="", r="", g="", b="", a="";
     std::vector<std::string> ret;
 
     for (std::vector<int>::iterator it = code.begin(); it != code.end(); ++it) {
@@ -100,7 +80,7 @@ std::vector<std::string> decode(std::vector<int> code){
     ret.push_back(a);
 
     sb_fprintf(stdout, "[COMUNICATION][decode] -> CRC %s, RED: %s, GREEN: %s, BLUE: %s, ALPHA: %s, TIME: %s\n"
-               , crc.c_str(), r.c_str(), g.c_str(), b.c_str(), a.c_str(), sc_time_stamp().to_string().c_str());
+                , crc.c_str(), r.c_str(), g.c_str(), b.c_str(), a.c_str(), sc_time_stamp().to_string().c_str());
 
     return ret;
 }
@@ -116,7 +96,7 @@ bool simple_bus_master_com::check_crc(std::vector<std::string> pckt_data) {
     std::string expected_crc = crc_generator(red, green, blue, alpha);
 
     sb_fprintf(stdout, "[COMUNICATION][CHECK] -> CRC READ: %s, CRC EXPECTED: %s, RED: %i, GREEN: %i, BLUE: %i, ALPHA: %i, TIME: %s\n"
-               , crc.c_str(), expected_crc.c_str(), red, green, blue, alpha, sc_time_stamp().to_string().c_str());
+            , crc.c_str(), expected_crc.c_str(), red, green, blue, alpha, sc_time_stamp().to_string().c_str());
 
 
     if (expected_crc == crc){
@@ -128,7 +108,7 @@ bool simple_bus_master_com::check_crc(std::vector<std::string> pckt_data) {
 void simple_bus_master_com::main_action() {
     int mydata;
     int read_en;
-    unsigned int memory_idx = 8;
+    unsigned int memory_idx = 20;
     std::vector<int> packet;
 
     // Cant Work
@@ -169,18 +149,26 @@ void simple_bus_master_com::main_action() {
                 }
                 // get crc from packets
                 // check crc
+
                 if (check_crc(decode(packet))) {
                     // save pixel in memory global (m_controller set position)
-                    sb_fprintf(stdout, "[COMUNICATION] -> CRC CHECKED, TIME: %s\n"
+                    sb_fprintf(stdout, "[COMUNICATION] -> CRC OOOOOOOOOKKKKKKKKKKKKKKKKKK, TIME: %s\n"
                               , sc_time_stamp().to_string().c_str());
-                    // mydata = 0;
-                    // bus_port->direct_write(&mydata, memory_idx);
-                    // memory_idx += 4;
+
+
+                    mydata = *(packet.end() - 1);
+                    bus_port->direct_write(&mydata, memory_idx);
+                    memory_idx += 4;
+                }
+                else{
+                    sb_fprintf(stdout, "[COMUNICATION] -> CRC FUUUUUUUUUUUUUUUUCK, TIME: %s\n"
+                              , sc_time_stamp().to_string().c_str());
                 }
 
                 // Generator can work
                 mydata = 0;
                 write(&mydata, 0);
+                packet.clear();
                 wait(m_timeout, SC_NS);
             }
             else {
@@ -197,25 +185,25 @@ void simple_bus_master_com::main_action() {
             bus_port->direct_write(&mydata, 0);
             wait(m_timeout, SC_NS);
 
-            sb_fprintf(stdout, "[COMUNICATION] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+            sb_fprintf(stdout, "[COMUNICATION] SAVE BEGIN MEMORY: TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
                        0,
                        mydata);
 
             // Stores the final position of the image data in global memory
-            mydata = memory_idx + 20;
+            mydata = memory_idx;
             bus_port->direct_write(&mydata, 4);
             wait(m_timeout, SC_NS);
 
-            sb_fprintf(stdout, "[COMUNICATION] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+            sb_fprintf(stdout, "[COMUNICATION] SAVE END MEMORY: TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
                        4,
                        mydata);
 
 
-              mydata = 10;
+              mydata = 64;
               bus_port->direct_write(&mydata, m_address_width);
-              sb_fprintf(stdout, "[COMUNICATION] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+              sb_fprintf(stdout, "[COMUNICATION] ON CRIP:  TIME: %s READ FROM: %d VALUE: %d\n",
                           sc_time_stamp().to_string().c_str(),
                           m_address_width,
                           mydata);

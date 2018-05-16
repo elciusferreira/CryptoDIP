@@ -38,7 +38,24 @@
 
 #include "simple_bus_encryption.h"
 #include "simple_bus_types.h"
+#include <vector>
 
+
+std::vector<int> unpack(int pixel){
+    std::vector<int> ret;
+    for (int i = 0; i < 4; ++i)
+        ret.push_back(pixel >> ((3-i) * 8) & 0xff);
+
+    return ret;
+}
+
+unsigned int pack(std::vector<int> pix){
+    unsigned int ret= 0;
+    for (int i = 0; i < 4 ; ++i)
+        ret += (pix[i] << (8 * (3-i))) & 0xff;
+
+    return ret;
+}
 
 void simple_bus_encryption::main_action() {
     int *control = new int;
@@ -52,16 +69,16 @@ void simple_bus_encryption::main_action() {
             *control = 0;
             bus_port->direct_write(control, m_address_reserved);
 
-            sb_fprintf(stdout, "S: %d E: %d R: %d!!!\n", m_address_start, m_address_end, m_address_reserved);
+
             getRange();
+
+            seeMemory();
+            KSA();
+            PRGA();
 
             //seeMemory();
             //KSA();
             //PRGA();
-
-            //seeMemory();
-            KSA();
-            PRGA();
 
             seeMemory();
 
@@ -87,51 +104,74 @@ void simple_bus_encryption::getRange() {
 
     bus_port->direct_read(value, m_address_end);
     address_read_end = *value;
+
+    sb_fprintf(stdout, "BEGIN: %d END: %d RESERVED: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
     delete value;
 }
 
 void simple_bus_encryption::KSA() {
-    sb_fprintf(stdout, "[CRIPT] SETUP CRIPT\n");
-    unsigned int positionMemory;
-    unsigned int i = 0;
-    unsigned int j = 0;
-    int position = 0;
-    int *values = new int;
-
-    for (positionMemory = 0; positionMemory < size_key * 4; positionMemory = positionMemory + 4) {
-        bus_port_intern->direct_write(&key_c[position], positionMemory);
-        position++;
+    sb_fprintf(stdout, "[CRIPT] KSA BEGIN\n");
+    for(int i =0; i< 256; i++){
+        s[i]=i;
     }
 
-    position = 0;
-    for (i = positionMemory; i < positionMemory + 256 * 4; i = i + 4) {
-        *values = position;
-        bus_port_intern->direct_write(values, i);
-        position++;
+    int j = 0;
+    for(int i = 0 ; i< 256; i++){
+        j = (j + s[i] + key_c[i % size_key]) % 256;
+        changee(i, j);
     }
 
-    position = 0;
-    for (i = positionMemory; i < positionMemory + 256 * 4; i = i + 4) {
-        bus_port_intern->direct_read(values, i);
+    sb_fprintf(stdout, "[CRIPT] KSA END\n");
+}
 
-        j = ((j + *values + key_c[position % size_key]) % 256) * 4;
-        change(i, j);
-
-        position++;
-    }
-
-    delete values;
-    sb_fprintf(stdout, "[CRIPT] SETUP CRIPT\n");
+void simple_bus_encryption::changee(int i, int j){
+    int aux = s[i];
+    s[i] = s[j];
+    s[j] = aux;
 }
 
 void simple_bus_encryption::PRGA() {
     sb_fprintf(stdout, "[CRIPT] PRGA BEGIN\n");
     int *valuesI = new int();
-    int *valuesJ = new int();
+    //int *valuesJ = new int();
     int *result = new int();
-    unsigned int posicao;
-    unsigned int aux;
-    unsigned int i = address_read_start, j = address_read_start;
+    //unsigned int posicao;
+    //unsigned int aux;
+    int i = address_read_start, j = address_read_start;
+
+    j=0;
+    i=0;
+    //char r,g,b,a;
+    std::vector<int> pixelAtual;
+    for (unsigned int aux = address_read_start; aux < address_read_end; aux += 4){
+        i = (i+1)%256;
+        j = (j+s[i])%256;
+        changee(i,j);
+
+        bus_port->direct_read(valuesI, aux);
+        pixelAtual = unpack(*valuesI);
+        //sb_fprintf(stdout, "[CRIPT] V: %d \n", *valuesI);
+
+
+        for(unsigned int b = 0 ; b < pixelAtual.size(); b++){
+                //sb_fprintf(stdout, "[CRIPT] V: %d \n", pixelAtual.at(b));
+
+                *result = (s[(s[i] + s[j]) % 256])^(pixelAtual.at(b));
+                pixelAtual.at(b) = *result;
+                //sb_fprintf(stdout, "[CRIPT] RESULT: %d \n", *result);
+        }
+
+        *result = pack(pixelAtual);
+        //sb_fprintf(stdout, "[CRIPT] PACK: %d \n", *result);
+
+        bus_port->direct_write(result, aux);
+    }
+
+
+
+
+
+    /*std::vector<int> pixelAtual;
     for (aux = address_read_start; aux < address_read_end; aux = aux + 4) {
         i = ((i + 1) % 256) * 4;
         bus_port_intern->direct_read(valuesI, i);
@@ -141,13 +181,25 @@ void simple_bus_encryption::PRGA() {
         bus_port_intern->direct_read(valuesJ, j);
         posicao = ((*valuesI + *valuesJ) % 256) * 4;
         bus_port->direct_read(valuesI, aux);
+        pixelAtual = unpack(*valuesI);
         bus_port_intern->direct_read(valuesJ, posicao);
+
+        sb_fprintf(stdout, "[CRIPT] UNPACK: %d \n", posicao);
+        for(unsigned int i = 0 ; i < pixelAtual.size(); i++){
+                sb_fprintf(stdout, "[CRIPT] V: %d \n", pixelAtual.at(i));
+                *result = pixelAtual.at(i) ^ *valuesJ;
+                pixelAtual.at(i) = *result;
+                sb_fprintf(stdout, "[CRIPT] RESULT: %d \n", *result);
+        }
+
+        *result = pack(pixelAtual);
+        sb_fprintf(stdout, "[CRIPT] PACK: %d \n", *result);
         *result = *valuesI ^ *valuesJ;
         bus_port->direct_write(result, aux);
     }
     delete valuesI;
     delete valuesJ;
-    delete result;
+    delete result; */
     sb_fprintf(stdout, "[CRIPT] PRGA END\n");
 }
 
