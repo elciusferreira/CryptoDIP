@@ -4,7 +4,7 @@
 int sc_main(int argc, char *argv[])
 {
     simple_bus_test top("top");
-    sc_start(3000, SC_NS);
+    sc_start(2000, SC_NS);
 
     return 0;
 }
