@@ -18,8 +18,9 @@
   <component name="ChangeListManager">
     <list default="true" id="70d312a5-8965-4df7-82ec-ed3bb7b639bc" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_master_com.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_com.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_master_gerad.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_gerad.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/generator" beforeDir="false" afterPath="$PROJECT_DIR$/generator/generator" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/generator.h" beforeDir="false" afterPath="$PROJECT_DIR$/generator/generator.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generator/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/generator/output.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/release/" />
@@ -36,7 +37,7 @@
     <favorites_list name="CryptoDIP_simple_bus" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.25">
+    <splitter split-orientation="horizontal" split-proportion="0.44027779">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="simple_bus_master_gerad.cpp" pinned="false" current-in-tab="true">
@@ -100,8 +101,8 @@
           <file leaf-file-name="simple_bus_master_com.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/simple_bus_master_com.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
+                <state relative-caret-position="710">
+                  <caret line="78" selection-start-line="78" selection-end-line="78" />
                 </state>
               </provider>
             </entry>
@@ -182,8 +183,8 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1439" />
-    <option name="y" value="-11" />
+    <option name="x" value="-1" />
+    <option name="y" value="889" />
     <option name="width" value="1442" />
     <option name="height" value="912" />
   </component>
@@ -257,15 +258,15 @@
       <workItem from="1524506298749" duration="8268000" />
       <workItem from="1526323557365" duration="10634000" />
       <workItem from="1526345012977" duration="4281000" />
-      <workItem from="1526483023418" duration="847000" />
+      <workItem from="1526483023418" duration="3533000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56994000" />
+    <option name="totallyTimeSpent" value="59680000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-11" width="1442" height="912" extended-state="6" />
+    <frame x="-1" y="889" width="1442" height="912" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20555556" />
@@ -524,6 +525,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+          <folding>
+            <element signature="e#1697#1717#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -643,8 +647,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_master_com.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
+        <state relative-caret-position="710">
+          <caret line="78" selection-start-line="78" selection-end-line="78" />
         </state>
       </provider>
     </entry>

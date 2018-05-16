@@ -50,7 +50,7 @@ public:
 
     void print(){
 //        printf("R: %c\nG: %c\nB: %c\nA: %c\n\n", r, g, b, a);
-        std::cout<< r<< " "<< g<< " "<< (b & 0xff)<< " "<< (a & 0xff)<< "\n";
+        std::cout << (r & 0xff) << " " << (g & 0xff) << " " << (b & 0xff) << " " << (a & 0xff) << "\n";
     }
 };
 
@@ -104,9 +104,9 @@ public:
             j = (j+s[i])%256;
             change(i,j);
             r = (s[(s[i] + s[j]) % 256])^(input.at(w).getR());
-            g = (s[(s[i] + s[j]) % 256])^input.at(w).getG();
-            b = (s[(s[i] + s[j]) % 256])^input.at(w).getB();
-            a = (s[(s[i] + s[j]) % 256])^input.at(w).getA();
+            g = (s[(s[i] + s[j]) % 256])^(input.at(w).getG());
+            b = (s[(s[i] + s[j]) % 256])^(input.at(w).getB());
+            a = (s[(s[i] + s[j]) % 256])^(input.at(w).getA());
 
             output.push_back(Pixel(r,g,b,a));
         }
@@ -171,22 +171,20 @@ public:
     /* CRC */
     void crcGenerator(){
         unsigned int size_pixels = elements.size();
-        char r, g, b, a;
-        //unsigned int aux;
+
         for(unsigned int i = 0; i < size_pixels; i++){
             printf("volta %u\n", i);
             elements.at(i).print();
 
-            r = elements.at(i).getR();
-            g = elements.at(i).getG();
-            b = elements.at(i).getB();
-            a = elements.at(i).getA();
+            std::string pixels;
+            pixels += char(elements[i].getR());
+            pixels += char(elements[i].getG());
+            pixels += char(elements[i].getB());
+            pixels += char(elements[i].getA());
 
-            char components[4];
-            components[0] = elements.at(i).getR();
-            components[1] = elements.at(i).getG();
-            components[2] = elements.at(i).getB();
-            components[3] = elements.at(i).getA();
+            const char *components = pixels.c_str();
+
+            printf("Components: [%u %u %u %u]\n", components[0] & 0xff, components[1] & 0xff, components[2] & 0xff, components[3] & 0xff);
 
             unsigned char digest[SHA256_DIGEST_LENGTH];
 
@@ -199,8 +197,11 @@ public:
             for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
                 sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
 
-            outputText += std::string(SHAString) + "," + std::to_string(r & 0xff) + "," + std::to_string(g & 0xff) + "," +
-                    std::to_string(b & 0xff) + "," + std::to_string(a & 0xff) + "\n";
+            outputText += std::string(SHAString) + ","
+                       + std::to_string(elements[i].getR()) + ","
+                       + std::to_string(elements[i].getG()) + ","
+                       + std::to_string(elements[i].getB()) + ","
+                       + std::to_string(elements[i].getA()) + "\n";
         }
     }
 
