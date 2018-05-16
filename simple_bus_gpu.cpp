@@ -8,27 +8,47 @@ void simple_bus_gpu::main_action() {
 
     while (true) {
         bus_port->direct_read(&start, flag_addr);
-        sb_fprintf(stdout, "[GPU] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), start);
-
+        //sb_fprintf(stdout, "[GPU] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), start);
 
         if (start == 1) {
-            sb_fprintf(stdout, "[GPU] TIME: %s VALUE: %d\n", sc_time_stamp().to_string().c_str(), start);
+            sb_fprintf(stdout, "[GPU] TIME: %s START\n", sc_time_stamp().to_string().c_str());
 
             bus_port->direct_read(&rd_addr, im_addr);
             bus_port->direct_read(&width, rd_addr);
             bus_port->direct_read(&height, rd_addr + 4);
+
+            sb_fprintf(stdout, "[GPU] Read Address: %u\n", rd_addr);
+            sb_fprintf(stdout, "[GPU] Image Width: %u\n", width);
+            sb_fprintf(stdout, "[GPU] Image Height: %u\n", height);
             wait(m_timeout/2, SC_NS);
+
             size = width * height;
             rd_addr += 8;
 
             if (size <= m_max_size) {
                 // Fetch image pixels into Buffer A
+                /*
                 for (int i = 0; i < size; i += 4) {
                     bus_port->direct_read(&bufferA[i], rd_addr + i*4);
                     bus_port->direct_read(&bufferA[i+4], rd_addr + i*4 + 4);
                     bus_port->direct_read(&bufferA[i+8], rd_addr + i*4 + 8);
                     bus_port->direct_read(&bufferA[i+12], rd_addr + i*4 + 12);
-                    //wait(m_timeout, SC_NS);
+                    wait(m_timeout, SC_NS);
+                }
+                */
+
+                for (int i = 0; i < size; i++) {
+                    bus_port->direct_read(&bufferA[i], rd_addr + i*4);
+
+                    sb_fprintf(stdout, "[GPU] TIME: %s \t Fetch pixel: [%u %u %u %u] %u\n",
+                               sc_time_stamp().to_string().c_str(),
+                               (bufferA[i] >> 24) & 0xff,
+                               (bufferA[i] >> 16) & 0xff,
+                               (bufferA[i] >> 8) & 0xff,
+                               bufferA[i] & 0xff,
+                               bufferA[i]);
+
+                    wait(m_timeout/4, SC_NS);
                 }
 
                 // Write pixels in order to rotate image in Buffer B
@@ -46,12 +66,13 @@ void simple_bus_gpu::main_action() {
                     }
                     --j;
                 }
-                sb_fprintf(stdout, "[GPU] ROTATION GO!\n");
+                sb_fprintf(stdout, "[GPU] Rotation Begin!\n");
                 // Write to file
                 if (m_test) {
                     imageWrite(bufferA, height, width, "original.png");
                     imageWrite(bufferB, height, width, "rotated.png");
                 }
+                sb_fprintf(stdout, "[GPU] Rotation Finished!\n");
 
                 // Write back the rotation result
                 /***
@@ -62,13 +83,28 @@ void simple_bus_gpu::main_action() {
                 bus_port->direct_write(&width, wr_addr + 4);
                 wait(m_timeout/2, SC_NS);
                 wr_addr += 8;
-
+                /*
                 for (int k = 0; k < size; k += 4) {
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4);
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4 + 4);
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4 + 8);
                     bus_port->direct_write(&bufferB[k], wr_addr + i*4 + 12);
                     //wait(m_timeout, SC_NS);
+                }
+                */
+
+                for (int k = 0; k < size; k++) {
+                    bus_port->direct_write(&bufferB[k], wr_addr + i*4);
+
+                    sb_fprintf(stdout, "[GPU] TIME: %s \t Write pixel: [%u %u %u %u] %u\n",
+                               sc_time_stamp().to_string().c_str(),
+                               (bufferB[i] >> 24) & 0xff,
+                               (bufferB[i] >> 16) & 0xff,
+                               (bufferB[i] >> 8) & 0xff,
+                               bufferB[i] & 0xff,
+                               bufferB[i]);
+
+                    wait(m_timeout/4, SC_NS);
                 }
 
                 if (m_verbose) {
@@ -86,7 +122,7 @@ void simple_bus_gpu::main_action() {
             }
         }
         else
-            sb_fprintf(stdout, "[GPU] CANT WORK!!!\n");
+            sb_fprintf(stdout, "[GPU] Can't Work!\n");
 
         wait(m_timeout, SC_NS);
     }
