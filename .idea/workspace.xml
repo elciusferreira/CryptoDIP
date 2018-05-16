@@ -17,6 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70d312a5-8965-4df7-82ec-ed3bb7b639bc" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simple_bus_master_com.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_com.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simple_bus_master_gerad.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_gerad.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -34,14 +36,14 @@
     <favorites_list name="CryptoDIP_simple_bus" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.52562225">
+    <splitter split-orientation="horizontal" split-proportion="0.25">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="simple_bus_master_gerad.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-891">
-                  <caret line="82" selection-start-line="82" selection-end-line="82" />
+                <state relative-caret-position="289">
+                  <caret line="17" column="105" selection-start-line="17" selection-start-column="105" selection-end-line="17" selection-end-column="105" />
                   <folding>
                     <element signature="e#0#36#0" expanded="true" />
                   </folding>
@@ -52,7 +54,7 @@
           <file leaf-file-name="basic_string.h" pinned="false" current-in-tab="false">
             <entry file="file:///usr/include/c++/5/bits/basic_string.h">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="115">
+                <state relative-caret-position="9486">
                   <caret line="558" selection-start-line="558" selection-end-line="558" />
                 </state>
               </provider>
@@ -63,15 +65,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="170">
                   <caret line="10" selection-start-line="10" selection-end-line="10" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="main2.h" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/generator/main2.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3128">
-                  <caret line="185" column="12" selection-start-line="185" selection-start-column="12" selection-end-line="185" selection-end-column="12" />
                 </state>
               </provider>
             </entry>
@@ -107,8 +100,8 @@
           <file leaf-file-name="simple_bus_master_com.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/simple_bus_master_com.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="43">
-                  <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+                <state relative-caret-position="255">
+                  <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
                 </state>
               </provider>
             </entry>
@@ -176,8 +169,8 @@
         <option value="$PROJECT_DIR$/simple_bus_gpu.h" />
         <option value="$PROJECT_DIR$/simple_bus_main.cpp" />
         <option value="$PROJECT_DIR$/generator/main2.h" />
-        <option value="$PROJECT_DIR$/simple_bus_master_com.cpp" />
         <option value="$PROJECT_DIR$/simple_bus_master_gerad.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_master_com.cpp" />
       </list>
     </option>
   </component>
@@ -189,10 +182,10 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1" />
-    <option name="y" value="-4" />
-    <option name="width" value="1368" />
-    <option name="height" value="773" />
+    <option name="x" value="1439" />
+    <option name="y" value="-11" />
+    <option name="width" value="1442" />
+    <option name="height" value="912" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -264,19 +257,19 @@
       <workItem from="1524506298749" duration="8268000" />
       <workItem from="1526323557365" duration="10634000" />
       <workItem from="1526345012977" duration="4281000" />
+      <workItem from="1526483023418" duration="847000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56147000" />
+    <option name="totallyTimeSpent" value="56994000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-4" width="1368" height="773" extended-state="6" />
+    <frame x="-1" y="-11" width="1442" height="912" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20555556" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.40963855" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.3298193" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" />
@@ -292,6 +285,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.40963855" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -530,9 +524,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
-          <folding>
-            <element signature="e#1697#1717#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -573,7 +564,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/generator/main2.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3128">
+        <state relative-caret-position="3145">
           <caret line="185" column="12" selection-start-line="185" selection-start-column="12" selection-end-line="185" selection-end-column="12" />
         </state>
       </provider>
@@ -582,9 +573,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="867">
           <caret line="51" column="8" selection-start-line="51" selection-start-column="8" selection-end-line="51" selection-end-column="8" />
-          <folding>
-            <element signature="e#75#95#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -629,13 +617,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_master_com.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_direct_if.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -645,18 +626,25 @@
     </entry>
     <entry file="file:///usr/include/c++/5/bits/basic_string.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
+        <state relative-caret-position="9486">
           <caret line="558" selection-start-line="558" selection-end-line="558" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-891">
-          <caret line="82" selection-start-line="82" selection-end-line="82" />
+        <state relative-caret-position="289">
+          <caret line="17" column="105" selection-start-line="17" selection-start-column="105" selection-end-line="17" selection-end-column="105" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_master_com.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="16" column="33" lean-forward="true" selection-start-line="16" selection-start-column="33" selection-end-line="16" selection-end-column="33" />
         </state>
       </provider>
     </entry>
