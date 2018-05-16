@@ -164,8 +164,8 @@ public:
     void encryption(){
         encryptionF.setInput(elements);
         elements = encryptionF.run();
-        //encryptionF.setInput(elements);
-        //elements = encryptionF.run();
+        encryptionF.setInput(elements);
+        elements = encryptionF.run();
     }
 
     /* CRC */
