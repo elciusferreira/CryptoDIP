@@ -1,5 +1,5 @@
-#ifndef __main2_h
-#define __main2_h
+#ifndef __generator_h
+#define __generator_h
 
 #include <iostream>
 #include <fstream>
@@ -164,8 +164,8 @@ public:
     void encryption(){
         encryptionF.setInput(elements);
         elements = encryptionF.run();
-        encryptionF.setInput(elements);
-        elements = encryptionF.run();
+        //encryptionF.setInput(elements);
+        //elements = encryptionF.run();
     }
 
     /* CRC */

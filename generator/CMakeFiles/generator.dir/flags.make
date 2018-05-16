@@ -6,5 +6,5 @@ CXX_FLAGS = -Wall -Werror   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/. -isystem /usr/local/include -isystem /usr/local/include/opencv 
+CXX_INCLUDES = -I/home/johannes/Documentos/Coprojeto/CryptoDIP/generator/. -isystem /usr/local/include -isystem /usr/local/include/opencv 
 

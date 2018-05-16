@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator
+CMAKE_SOURCE_DIR = /home/johannes/Documentos/Coprojeto/CryptoDIP/generator
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator
+CMAKE_BINARY_DIR = /home/johannes/Documentos/Coprojeto/CryptoDIP/generator
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,8 +69,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/local/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/local/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/CMakeFiles /home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/johannes/Documentos/Coprojeto/CryptoDIP/generator/CMakeFiles /home/johannes/Documentos/Coprojeto/CryptoDIP/generator/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/johannes/Documentos/Coprojeto/CryptoDIP/generator/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -157,8 +157,8 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... generator"
 	@echo "... edit_cache"
+	@echo "... generator"
 	@echo "... generator.o"
 	@echo "... generator.i"
 	@echo "... generator.s"
