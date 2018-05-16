@@ -33,10 +33,33 @@ std::string simple_bus_master_com::crc_generator(int red, int green, int blue, i
     crc += std::string(SHAString) + "," + std::to_string(red & 0xff) + "," + std::to_string(green & 0xff) + "," +
             std::to_string(blue & 0xff) + "," + std::to_string(alpha & 0xff) + "\n";
 
-    return outputText;
+std::vector<std::string> decode(std::vector<int> code){
+    std::string crc, r, g, b, a;
+    std::vector<std::string> ret;
 
+    for (std::vector<int>::iterator it = code.begin(); it != code.end(); ++it) {
+        if (it == code.end() - 1){
+            r = char((*it) >> 24);
+            g = char((*it) >> 16);
+            b = char((*it) >> 8);
+            a = char((*it));
+        }
+        else{
+            for (int i = 0; i < 4; ++i)
+                crc += char((*it) >> ((3 - i) * 8));
+        }
+    }
+
+    ret.push_back(crc);
+    ret.push_back(r);
+    ret.push_back(g);
+    ret.push_back(b);
+    ret.push_back(a);
+
+    return ret;
 }
-*/
+
+
 void simple_bus_master_com::main_action() {
     int mydata;
     int read_en;
@@ -75,7 +98,7 @@ void simple_bus_master_com::main_action() {
                     packet.push_back(mydata);
 
                     sb_fprintf(stdout, "[COMUNICATION] -> I: %i, TIME: %s, VALUE: %d\n",
-                                i, sc_time_stamp().to_string().c_str(), mydata);
+                               i, sc_time_stamp().to_string().c_str(), mydata);
 
                     wait(m_timeout, SC_NS);
                 }

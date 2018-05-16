@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/generator.cpp
-main2.h
-/home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/main2.h
+/home/johannes/Documentos/Coprojeto/CryptoDIP/generator/generator.cpp
+generator.h
+/home/johannes/Documentos/Coprojeto/CryptoDIP/generator/generator.h
 
-/home/johannes/Documentos/P8/Coprojeto_HW_SW/Projetos/CryptoDIP/generator/main2.h
+/home/johannes/Documentos/Coprojeto/CryptoDIP/generator/generator.h
 iostream
 -
 fstream
@@ -1331,8 +1331,4 @@ opencv2/videostab/global_motion.hpp
 /usr/local/include/opencv2/videostab/opencv2/videostab/global_motion.hpp
 opencv2/videostab/log.hpp
 /usr/local/include/opencv2/videostab/opencv2/videostab/log.hpp
-
-/usr/local/include/opencv2/xfeatures2d/cuda.hpp
-opencv2/core/cuda.hpp
-/usr/local/include/opencv2/xfeatures2d/opencv2/core/cuda.hpp
 
