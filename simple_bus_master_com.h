@@ -7,6 +7,8 @@
 #include "simple_bus_slave_if.h"
 #include "simple_bus_direct_if.h"
 #include <vector>
+#include <opencv2/highgui.hpp>
+#include <openssl/sha.h>
 
 class simple_bus_master_com
   : public simple_bus_slave_if
@@ -55,7 +57,7 @@ public:
 
   // process
   void main_action();
-
+  bool check_crc();
   // direct Slave Interface
   bool direct_read(int *data, unsigned int address);
   bool direct_write(int *data, unsigned int address);
@@ -76,6 +78,7 @@ private:
   int m_timeout;
   bool m_verbose;
   int * MEM;
+  std::string crc_generator();
 
 }; // end class simple_bus_master_direct
 

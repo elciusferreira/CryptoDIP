@@ -1,15 +1,46 @@
 #include "simple_bus_master_com.h"
 #include "simple_bus_types.h"
+/*
+// Verify data integrity.
+bool check_crc(int red, int green, int blue, int alpha, std::string expected_crc) {
+        crc = crc_generator(red, green, blue, alpha);
+        if (expected_crc == crc)
+            return true;
+        else
+            return false;
+}
 
-/* Verify data integrity. */
-/*bool check_crc(int red, int green, int blue, int alpha, int expected_crc) {
-        //
-}*/
+// Calculate packet CRC
+std::string simple_bus_master_com::crc_generator(int red, int green, int blue, int alpha) {
+    std::string crc;
+    char components[4];
+    components[0] = red;
+    components[1] = green;
+    components[2] = blue;
+    components[3] = alpha;
 
+    unsigned char digest[SHA256_DIGEST_LENGTH];
+
+    SHA256_CTX ctx;
+    SHA256_Init(&ctx);
+    SHA256_Update(&ctx, components, strlen(components));
+    SHA256_Final(digest, &ctx);
+
+    char* SHAString = new char[SHA256_DIGEST_LENGTH*2+1];
+    for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+        sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
+
+    crc += std::string(SHAString) + "," + std::to_string(red & 0xff) + "," + std::to_string(green & 0xff) + "," +
+            std::to_string(blue & 0xff) + "," + std::to_string(alpha & 0xff) + "\n";
+
+    return outputText;
+
+}
+*/
 void simple_bus_master_com::main_action() {
     int mydata;
     int read_en;
-    //unsigned int m_controller = 4;
+    unsigned int memory_idx = 8;
     std::vector<int> packet;
 
     // Cant Work
@@ -51,14 +82,16 @@ void simple_bus_master_com::main_action() {
                 // get crc from packets
 
                 // check crc
+                //if (check_crc == true) {
+                    // save pixel in memory global (m_controller set position)
 
-                // save pixel in memory global (m_controller set position)
+                    mydata = 0;
+                    bus_port->direct_write(&mydata, memory_idx);
+                //}
 
                 // Generator can work
                 mydata = 0;
                 write(&mydata, 0);
-
-
                 wait(m_timeout, SC_NS);
             }
             else {
