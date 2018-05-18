@@ -48,7 +48,7 @@ public:
                       int max_size = 4096,
                       int timeout = 100,
                       bool verbose = true,
-                      bool test = false)
+                      bool test = true)
             :sc_module(name_),
              im_addr(image_address),
              wr_addr(write_address),

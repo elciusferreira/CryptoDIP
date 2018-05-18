@@ -72,15 +72,15 @@ void simple_bus_encryption::main_action() {
 
             getRange();
 
-            seeMemory();
+            //seeMemory();
             KSA();
             PRGA();
 
-            //seeMemory();
+            seeMemory();
             //KSA();
             //PRGA();
 
-            seeMemory();
+            //seeMemory();
 
             *control = 1;
             bus_port->direct_write(control, m_address_graphs);
@@ -152,23 +152,21 @@ void simple_bus_encryption::PRGA() {
         pixelAtual = unpack(*valuesI);
         //sb_fprintf(stdout, "[CRIPT] V: %d \n", *valuesI);
 
-
         for(unsigned int b = 0 ; b < pixelAtual.size(); b++){
-                //sb_fprintf(stdout, "[CRIPT] V: %d \n", pixelAtual.at(b));
+                sb_fprintf(stdout, "[CRIPT] V: %d \n", pixelAtual.at(b));
 
                 *result = (s[(s[i] + s[j]) % 256])^(pixelAtual.at(b));
                 pixelAtual.at(b) = *result;
-                //sb_fprintf(stdout, "[CRIPT] RESULT: %d \n", *result);
+                sb_fprintf(stdout, "[CRIPT] RESULT: %d \n", *result);
         }
 
-        *result = pack(pixelAtual);
-        //sb_fprintf(stdout, "[CRIPT] PACK: %d \n", *result);
+        *valuesI = pack(pixelAtual);
+        sb_fprintf(stdout, "[CRIPT] PACK: %d \n", *result);
 
-        bus_port->direct_write(result, aux);
+        bus_port->direct_write(valuesI, aux);
+        pixelAtual.clear();
+        wait(m_timeout, SC_NS);
     }
-
-
-
 
 
     /*std::vector<int> pixelAtual;
@@ -200,6 +198,7 @@ void simple_bus_encryption::PRGA() {
     delete valuesI;
     delete valuesJ;
     delete result; */
+
     sb_fprintf(stdout, "[CRIPT] PRGA END\n");
 }
 

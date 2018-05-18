@@ -108,11 +108,8 @@ bool simple_bus_master_com::check_crc(std::vector<std::string> pckt_data) {
 void simple_bus_master_com::main_action() {
     int mydata;
     int read_en;
-<<<<<<< HEAD
     unsigned int memory_idx = 20;
-=======
     //unsigned int m_controller = 4;
->>>>>>> e2e4fc11a896652925756329aaee862706c6d92b
     std::vector<int> packet;
 
     // Cant Work
@@ -153,7 +150,6 @@ void simple_bus_master_com::main_action() {
                 }
                 // get crc from packets
                 // check crc
-<<<<<<< HEAD
 
                 if (check_crc(decode(packet))) {
                     // save pixel in memory global (m_controller set position)
@@ -169,20 +165,16 @@ void simple_bus_master_com::main_action() {
                     sb_fprintf(stdout, "[COMUNICATION] -> CRC FUUUUUUUUUUUUUUUUCK, TIME: %s\n"
                               , sc_time_stamp().to_string().c_str());
                 }
-=======
 
                 // save pixel in memory global (m_controller set position)
->>>>>>> e2e4fc11a896652925756329aaee862706c6d92b
+
 
                 // Generator can work
                 mydata = 0;
                 write(&mydata, 0);
-<<<<<<< HEAD
+
                 packet.clear();
-=======
 
-
->>>>>>> e2e4fc11a896652925756329aaee862706c6d92b
                 wait(m_timeout, SC_NS);
             }
             else {
@@ -222,6 +214,7 @@ void simple_bus_master_com::main_action() {
                           m_address_width,
                           mydata);
               wait(m_timeout, SC_NS);
+              
 
 
             mydata = 1;
