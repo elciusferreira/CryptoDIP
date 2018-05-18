@@ -23,6 +23,8 @@ opencv2/highgui.hpp
 -
 openssl/sha.h
 -
+string
+-
 
 /usr/local/include/opencv/cxcore.h
 opencv2/core/core_c.h

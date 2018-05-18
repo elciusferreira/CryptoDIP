@@ -7,6 +7,7 @@
 #include <vector>
 #include <opencv2/highgui.hpp>
 #include <openssl/sha.h>
+#include <string>
 
 
 class Pixel{
@@ -50,7 +51,7 @@ public:
 
     void print(){
 //        printf("R: %c\nG: %c\nB: %c\nA: %c\n\n", r, g, b, a);
-        std::cout << (r & 0xff) << " " << (g & 0xff) << " " << (b & 0xff) << " " << (a & 0xff) << "\n";
+        //std::cout << (r & 0xff) << " " << (g & 0xff) << " " << (b & 0xff) << " " << (a & 0xff) << "\n";
     }
 };
 
@@ -58,8 +59,8 @@ public:
 class Encryption{
 private:
     int s[256];
-    int key[5];
-    int sizeKey;
+    int key_c[9];
+    int size_key;
     std::vector<Pixel> input;
 
     void change(int i, int j){
@@ -70,16 +71,30 @@ private:
 
 public:
     Encryption(){
-        for(int i=0; i<5 ; i++)
-            key[i] = (i*12+70)%256;
-        sizeKey = 5;
+        key_c[0] = 99;
+        key_c[1] = 111;
+        key_c[2] = 112;
+        key_c[3] = 114;
+        key_c[4] = 111;
+        key_c[5] = 106;
+        key_c[6] = 101;
+        key_c[7] = 116;
+        key_c[8] = 111;
+        size_key = 9;
     }
 
     Encryption(std::vector<Pixel> input){
         this->input = input;
-        for(int i=0; i<5 ; i++)
-            key[i] = (i*12+70)%256;
-        sizeKey = 5;
+        key_c[0] = 99;
+        key_c[1] = 111;
+        key_c[2] = 112;
+        key_c[3] = 114;
+        key_c[4] = 111;
+        key_c[5] = 106;
+        key_c[6] = 101;
+        key_c[7] = 116;
+        key_c[8] = 111;
+        size_key = 9;
     }
 
     std::vector<Pixel> run(){
@@ -90,7 +105,7 @@ public:
 
         int j = 0;
         for(int i = 0 ; i< 256; i++){
-            j = (j + s[i] + key[i % sizeKey]) % 256;
+            j = (j + s[i] + key_c[i % size_key]) % 256;
             change(i, j);
         }
 
@@ -114,11 +129,111 @@ public:
         return output;
     }
 
+
+    std::vector<int> run(std::vector<int> array_test){
+        for(int k = 0; k < size_key; k++){
+            std::cout<< " "<< key_c[k];
+        }
+        // KSA
+        for(int i =0; i< 256; i++){
+            s[i]=i;
+        }
+
+        int j = 0;
+        for(int i = 0 ; i< 256; i++){
+            j = (j + s[i] + key_c[i % size_key]) % 256;
+            if(i<11)
+                std::cout<< "J: "<< j<< " S: "<< s[i]
+                         << " K: " << key_c[i % size_key]<<
+                         " ALL: "<< (j + s[i] + key_c[i % size_key]) <<"\n";
+            change(i, j);
+        }
+
+        // PRGA
+        std::vector<int> output;
+        j=0;
+        int i=0;
+        int r;
+        int position;
+        for (unsigned int w = 0; w < 11; w++){
+            i = (i+1)%256;
+            j = (j+s[i])%256;
+            std::cout << "I: "<< i << " J: "<<j;
+            change(i,j);
+            std::cout<< " Value: "<< array_test.at(w);
+            position = (s[i] + s[j]) % 256;
+            std::cout<< " Position Change: "<< position;
+            r = (s[position])^(array_test.at(w));
+            std::cout<< " Descryption: " << r<<"\n";
+            output.push_back(r);
+        }
+
+        return output;
+    }
+
     void setInput(std::vector<Pixel> newInput){
         input= newInput;
     }
 
 };
+
+
+class TestCrypt{
+private:
+    Encryption module_crip;
+    std::vector<int> array_file;
+    std::vector<int> array_test;
+    std::string outputFile;
+
+public:
+    TestCrypt(std::string file_name){
+        std::cout<<"Get File enpytion\n";
+        std::ifstream input(file_name.c_str());
+        std::string line;
+
+        while (getline(input, line)){
+            array_file.push_back(std::stoi(line));
+        }
+
+    }
+
+    void compareFiles(std::string file_dec){
+        std::cout<<"Compare Files\n";
+        std::ifstream input(file_dec.c_str());
+        std::string line;
+
+        std::vector<int> file_d;
+        while (getline(input, line)){
+            file_d.push_back(std::stoi(line));
+            //std::cout<< std::stoi(line)<<"\n";
+        }
+
+        for(unsigned int i=0; i< file_d.size(); i++){
+            if(array_test.at(i) != file_d.at(i)){
+                std::cout<< " FAil";
+                break;
+            }
+        }
+    }
+
+    void decrypt(){
+        std::cout<<"Decryption\n";
+        array_test = module_crip.run(array_file);
+    }
+    void saveFile(){
+        std::cout<<"Save decryption\n";
+        outputFile.clear();
+        for(unsigned int i=0; i< array_test.size(); i++){
+            outputFile += std::to_string(array_test.at(i)) + "\n";
+
+        }
+        std::ofstream output;
+        output.open ("output_testCrp.txt");
+        output << outputFile;
+        output.close();
+    }
+};
+
 
 
 class ModuleTest{
@@ -130,6 +245,7 @@ private:
 
 public:
     ModuleTest(std::string path){
+        std::cout<<"Open file\nGetImageToPixels\n";
         this->path = path;
         cv::Mat image;
         image = cv::imread(path, CV_LOAD_IMAGE_COLOR);
@@ -141,7 +257,7 @@ public:
         else{
             _read = true;
 
-            printf("The image dimensions are %i x %i pixels.\n\n", image.cols, image.rows);
+            //printf("The image dimensions are %i x %i pixels.\n\n", image.cols, image.rows);
 
             unsigned int it = 0;
             char buffer[3];
@@ -162,19 +278,24 @@ public:
     }
 
     void encryption(){
+        std::cout<<"Encryption\n";
         encryptionF.setInput(elements);
         elements = encryptionF.run();
+    }
+
+    void decryption(){
         encryptionF.setInput(elements);
         elements = encryptionF.run();
     }
 
     /* CRC */
     void crcGenerator(){
+        std::cout<<"CRC\n";
         unsigned int size_pixels = elements.size();
 
         for(unsigned int i = 0; i < size_pixels; i++){
-            printf("volta %u\n", i);
-            elements.at(i).print();
+            //printf("volta %u\n", i);
+            //elements.at(i).print();
 
             std::string pixels;
             pixels += char(elements[i].getR());
@@ -184,7 +305,7 @@ public:
 
             const char *components = pixels.c_str();
 
-            printf("Components: [%u %u %u %u]\n", components[0] & 0xff, components[1] & 0xff, components[2] & 0xff, components[3] & 0xff);
+            //printf("Components: [%u %u %u %u]\n", components[0] & 0xff, components[1] & 0xff, components[2] & 0xff, components[3] & 0xff);
 
             unsigned char digest[SHA256_DIGEST_LENGTH];
 
@@ -197,18 +318,22 @@ public:
             for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
                 sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
 
-            outputText += std::string(SHAString) + ","
+            outputText += std::string(SHAString) +  ","
                        + std::to_string(elements[i].getR()) + ","
                        + std::to_string(elements[i].getG()) + ","
                        + std::to_string(elements[i].getB()) + ","
                        + std::to_string(elements[i].getA()) + "\n";
+
+
+            //outputText += std::to_string(elements[i].getR()) + "\n";
         }
     }
 
     // Save file
     void saveFile(){
+        std::cout<<"Save File\n";
         std::ofstream output;
-        output.open ("output.txt");
+        output.open ("output_f.txt");
         output << outputText;
         output.close();
     }

@@ -72,10 +72,18 @@ SC_MODULE(simple_bus_encryption)
     , m_verbose(verbose)
   {
     // process declaration
-    size_key = 5;
-    
-    for(int i =0 ; i < 5; i++)
-      key_c[i] = i*50;
+
+    key_c[0] = 99;
+    key_c[1] = 111;
+    key_c[2] = 112;
+    key_c[3] = 114;
+    key_c[4] = 111;
+    key_c[5] = 106;
+    key_c[6] = 101;
+    key_c[7] = 116;
+    key_c[8] = 111;
+    size_key = 9;
+
     SC_THREAD(main_action);
   }
 
@@ -88,14 +96,17 @@ private:
   int m_timeout, m_timeout_internal;
   bool m_verbose;
   unsigned int size_key;
-  int key_c[5];
+  int key_c[9];
+  int s[256];
   
   // private process
   void KSA();
   void PRGA();
-  void change(unsigned int i, unsigned int j);
+  void change(int i, int j);
   void getRange();
   void seeMemory();
+  void openFileAndSaveMemory();
+  void compareResult();
 
 
 }; // end class simple_bus_master_direct

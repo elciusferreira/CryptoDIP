@@ -38,6 +38,8 @@
 
 #include "simple_bus_encryption.h"
 #include "simple_bus_types.h"
+#include <fstream>
+#include <sstream>
 
 
 void simple_bus_encryption::main_action() {
@@ -52,20 +54,22 @@ void simple_bus_encryption::main_action() {
             *control = 0;
             bus_port->direct_write(control, m_address_reserved);
 
-            sb_fprintf(stdout, "S: %d E: %d R: %d!!!\n", m_address_start, m_address_end, m_address_reserved);
+
             getRange();
+            sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
 
-            //seeMemory();
-            //KSA();
-            //PRGA();
+            openFileAndSaveMemory();
 
-            //seeMemory();
+            seeMemory();
             KSA();
             PRGA();
 
+            //compareResult();
+
             seeMemory();
 
-            *control = 1;
+            //*control = 1;
+            *control = 0;
             bus_port->direct_write(control, m_address_graphs);
             sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
@@ -80,6 +84,58 @@ void simple_bus_encryption::main_action() {
     }
 }
 
+int stringToint(const std::string str){
+    //std::string str = "123";
+    int num;
+    std::istringstream(str) >> num;
+    return num;
+}
+
+void simple_bus_encryption::compareResult(){
+    std::vector<int> lines;
+    std::string path = "../generator/output_d.txt";
+    std::ifstream input(path.c_str());
+    std::string line;
+
+    while (getline(input, line)){
+        lines.push_back(stringToint(line));
+    }
+
+    int data;
+    int k = 0;
+    for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
+        bus_port->direct_read(&data, i);
+        if(data != lines.at(k))
+            std::cout<<"Err\n";
+        k++;
+
+    }
+}
+
+void simple_bus_encryption::openFileAndSaveMemory(){
+        std::vector<int> lines;
+        std::string path = "../generator/output_e.txt";
+        std::ifstream input(path.c_str());
+        std::string line;
+
+        while (getline(input, line)){
+            lines.push_back(stringToint(line));
+        }
+        address_read_start = 20;
+        address_read_end = (lines.size()*4)+20;
+        std::cout<<"MEMORY MAX: "<< address_read_end <<"\n";
+        int data;
+
+        int k = 0;
+        for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
+            data = lines.at(k);
+            std::cout<<data <<"\n" <<k<< "\n";
+            k++;
+            //bus_port->direct_write(&data, i);
+        }
+}
+
+
 void simple_bus_encryption::getRange() {
     int *value = new int;
     bus_port->direct_read(value, m_address_start);
@@ -91,82 +147,51 @@ void simple_bus_encryption::getRange() {
 }
 
 void simple_bus_encryption::KSA() {
-    sb_fprintf(stdout, "[CRIPT] SETUP CRIPT\n");
-    unsigned int positionMemory;
-    unsigned int i = 0;
-    unsigned int j = 0;
-    int position = 0;
-    int *values = new int;
+    sb_fprintf(stdout, "[CRIPT] BEGIN KSA\n");
 
-    for (positionMemory = 0; positionMemory < size_key * 4; positionMemory = positionMemory + 4) {
-        bus_port_intern->direct_write(&key_c[position], positionMemory);
-        position++;
+    for(int i =0; i< 256; i++){
+        s[i]=i;
     }
 
-    position = 0;
-    for (i = positionMemory; i < positionMemory + 256 * 4; i = i + 4) {
-        *values = position;
-        bus_port_intern->direct_write(values, i);
-        position++;
-    }
-
-    position = 0;
-    for (i = positionMemory; i < positionMemory + 256 * 4; i = i + 4) {
-        bus_port_intern->direct_read(values, i);
-
-        j = ((j + *values + key_c[position % size_key]) % 256) * 4;
+    int j = 0;
+    for(int i = 0 ; i< 256; i++){
+        j = (j + s[i] + key_c[i % size_key]) % 256;
         change(i, j);
-
-        position++;
     }
 
-    delete values;
-    sb_fprintf(stdout, "[CRIPT] SETUP CRIPT\n");
+    sb_fprintf(stdout, "[CRIPT] END KSA\n");
 }
 
 void simple_bus_encryption::PRGA() {
     sb_fprintf(stdout, "[CRIPT] PRGA BEGIN\n");
-    int *valuesI = new int();
-    int *valuesJ = new int();
-    int *result = new int();
-    unsigned int posicao;
-    unsigned int aux;
-    unsigned int i = address_read_start, j = address_read_start;
-    for (aux = address_read_start; aux < address_read_end; aux = aux + 4) {
-        i = ((i + 1) % 256) * 4;
-        bus_port_intern->direct_read(valuesI, i);
-        j = ((j + *valuesI) % 256) * 4;
-        change(i, j);
-        bus_port_intern->direct_read(valuesI, i);
-        bus_port_intern->direct_read(valuesJ, j);
-        posicao = ((*valuesI + *valuesJ) % 256) * 4;
-        bus_port->direct_read(valuesI, aux);
-        bus_port_intern->direct_read(valuesJ, posicao);
-        *result = *valuesI ^ *valuesJ;
-        bus_port->direct_write(result, aux);
+
+    int mydata;
+    int j=0;
+    int i=0;
+    int descryption;
+    for (unsigned int w = address_read_start; w <= address_read_end ; w+= 4){
+        i = (i+1)%256;
+        j = (j+s[i])%256;
+        change(i,j);
+        bus_port->direct_read(&mydata, w);
+        descryption = (s[(s[i] + s[j]) % 256])^(mydata);
+        bus_port->direct_write(&descryption, w);
     }
-    delete valuesI;
-    delete valuesJ;
-    delete result;
+
     sb_fprintf(stdout, "[CRIPT] PRGA END\n");
 }
 
-void simple_bus_encryption::change(unsigned int i, unsigned int j) {
-    int *aux = new int;
-    int si;
-    bus_port_intern->direct_read(aux, i);
-    si = *aux;
-    bus_port_intern->direct_read(aux, j);
-    bus_port_intern->direct_write(aux, i);
-    *aux = si;
-    bus_port_intern->direct_write(aux, j);
-    delete aux;
+void simple_bus_encryption::change(int i,int j) {
+
+    int aux = s[i];
+    s[i] = s[j];
+    s[j] = aux;
 }
 
 void simple_bus_encryption::seeMemory() {
     int *values = new int;
     sb_fprintf(stdout, "[CRIPT] START SEE MEMORY\n");
-    for (unsigned int i = address_read_start; i < address_read_end; i = i + 4) {
+    for (unsigned int i = address_read_start; i <= address_read_end; i = i + 4) {
         bus_port->direct_read(values, i);
         sb_fprintf(stdout, "M-> %s MEMORY: %d  VALUE:%d\n", sc_time_stamp().to_string().c_str(), i, *values);
         wait(0, SC_NS);
