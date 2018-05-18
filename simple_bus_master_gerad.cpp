@@ -10,21 +10,21 @@ std::vector<std::string> Process_file(std::string file_name)
     std::ifstream input(file_name.c_str());
     std::string line;
 
-    /*while (getline(input, line)){
+    while (getline(input, line)){
         //sb_fprintf(stdout, "%s\n", line.c_str());
         lines.push_back(line);
-    }*/
-
-    std::string test1 = "e85e0680276cda04f0c8315c42f5bb6adcf4389920ceb46cc9858dc981d60abf,135,135,135,135";
-    for (int i = 0; i < 1 ;  i++){
-        lines.push_back(test1);
     }
+
+    // std::string test1 = "42a5fac04ad74c7274d1994cb3a576d0975dbab36e1c9841ac0be9c99702f5fd,75,75,75,75";
+    // for (int i = 0; i < 1 ;  i++){
+    //     lines.push_back(test1);
+    // }
 
     return lines;
 }
 
 
-int stoi(const std::string str){
+int inline stoi(const std::string str){
     //std::string str = "123";
     int num;
     std::istringstream(str) >> num;
@@ -93,11 +93,11 @@ void simple_bus_master_gerad::main_action() {
     flag = 0;
     bus_port->direct_write(&flag, 0);
 
-    std::vector<std::string> file = Process_file("../generator/ouput.txt");
+    std::vector<std::string> file = Process_file("../generator/teste.txt");
 
 //    newValue = 0;
 //    bus_port->direct_write(&newValue, 0);
-
+    int line_size = 1;
     // READ TXT!!!!
     while (true) {
         bus_port->direct_read(&flag, 0);
@@ -118,7 +118,7 @@ void simple_bus_master_gerad::main_action() {
         std::string line = file.at(0);
         file.erase(file.begin());
         int size = line.length();
-
+        sb_fprintf(stdout, "[GENERATOR] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LINE: %i!\n", line_size++);
         std::string crc;
         std::string r;
         std::string g;

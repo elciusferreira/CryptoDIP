@@ -40,7 +40,24 @@
 #include "simple_bus_types.h"
 #include <fstream>
 #include <sstream>
+#include <vector>
 
+
+std::vector<int> unpack(int pixel){
+    std::vector<int> ret;
+    for (int i = 0; i < 4; ++i)
+        ret.push_back(pixel >> ((3-i) * 8) & 0xff);
+
+    return ret;
+}
+
+unsigned int pack(std::vector<int> pix){
+    unsigned int ret= 0;
+    for (int i = 0; i < 4 ; ++i)
+        ret += (pix[i] << (8 * (3-i))) & 0xff;
+
+    return ret;
+}
 
 void simple_bus_encryption::main_action() {
     int *control = new int;
@@ -54,11 +71,13 @@ void simple_bus_encryption::main_action() {
             *control = 0;
             bus_port->direct_write(control, m_address_reserved);
 
-
             getRange();
             sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
 
             openFileAndSaveMemory();
+
+
+            getRange();
 
             seeMemory();
             KSA();
@@ -67,6 +86,10 @@ void simple_bus_encryption::main_action() {
             //compareResult();
 
             seeMemory();
+            //KSA();
+            //PRGA();
+
+            //seeMemory();
 
             //*control = 1;
             *control = 0;
@@ -143,12 +166,13 @@ void simple_bus_encryption::getRange() {
 
     bus_port->direct_read(value, m_address_end);
     address_read_end = *value;
+
+    sb_fprintf(stdout, "BEGIN: %d END: %d RESERVED: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
     delete value;
 }
 
 void simple_bus_encryption::KSA() {
-    sb_fprintf(stdout, "[CRIPT] BEGIN KSA\n");
-
+    sb_fprintf(stdout, "[CRIPT] KSA BEGIN\n");
     for(int i =0; i< 256; i++){
         s[i]=i;
     }
@@ -156,10 +180,10 @@ void simple_bus_encryption::KSA() {
     int j = 0;
     for(int i = 0 ; i< 256; i++){
         j = (j + s[i] + key_c[i % size_key]) % 256;
-        change(i, j);
+        changee(i, j);
     }
 
-    sb_fprintf(stdout, "[CRIPT] END KSA\n");
+    sb_fprintf(stdout, "[CRIPT] KSA END\n");
 }
 
 void simple_bus_encryption::PRGA() {
@@ -182,7 +206,6 @@ void simple_bus_encryption::PRGA() {
 }
 
 void simple_bus_encryption::change(int i,int j) {
-
     int aux = s[i];
     s[i] = s[j];
     s[j] = aux;

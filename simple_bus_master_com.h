@@ -9,6 +9,7 @@
 #include <vector>
 #include <opencv2/highgui.hpp>
 #include <openssl/sha.h>
+#include <sstream>
 
 class simple_bus_master_com
   : public simple_bus_slave_if
@@ -57,7 +58,7 @@ public:
 
   // process
   void main_action();
-  bool check_crc();
+  bool check_crc(std::vector<std::string> pckt_data);
   // direct Slave Interface
   bool direct_read(int *data, unsigned int address);
   bool direct_write(int *data, unsigned int address);
@@ -78,7 +79,7 @@ private:
   int m_timeout;
   bool m_verbose;
   int * MEM;
-  std::string crc_generator();
+  std::string crc_generator(int red, int green, int blue, int alpha);
 
 }; // end class simple_bus_master_direct
 
