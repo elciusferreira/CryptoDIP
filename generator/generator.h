@@ -333,7 +333,7 @@ public:
     void saveFile(){
         std::cout<<"Save File\n";
         std::ofstream output;
-        output.open ("output_f.txt");
+        output.open ("output_fe.txt");
         output << outputText;
         output.close();
     }

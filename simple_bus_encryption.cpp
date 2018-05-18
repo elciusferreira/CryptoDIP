@@ -1,47 +1,5 @@
-/*****************************************************************************
-
-  Licensed to Accellera Systems Initiative Inc. (Accellera) under one or
-  more contributor license agreements.  See the NOTICE file distributed
-  with this work for additional information regarding copyright ownership.
-  Accellera licenses this file to you under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with the
-  License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-  implied.  See the License for the specific language governing
-  permissions and limitations under the License.
-
- *****************************************************************************/
-
-/*****************************************************************************
-
-  simple_bus_master_direct.cpp : The monitor (master) using the direct BUS
-                                 interface.
-
-  Original Author: Ric Hilderink, Synopsys, Inc., 2001-10-11
-
- *****************************************************************************/
-
-/*****************************************************************************
-
-  MODIFICATION LOG - modifiers, enter your name, affiliation, date and
-  changes you are making here.
-
-      Name, Affiliation, Date:
-  Description of Modification:
-
- *****************************************************************************/
-
 #include "simple_bus_encryption.h"
 #include "simple_bus_types.h"
-#include <fstream>
-#include <sstream>
-#include <vector>
-
 
 std::vector<int> unpack(int pixel){
     std::vector<int> ret;
@@ -51,11 +9,11 @@ std::vector<int> unpack(int pixel){
     return ret;
 }
 
-unsigned int pack(std::vector<int> pix){
-    unsigned int ret= 0;
-    for (int i = 0; i < 4 ; ++i)
-        ret += (pix[i] << (8 * (3-i))) & 0xff;
-
+int pack(std::vector<int> pix){
+    int ret= 0;
+    for (int i = 0; i < 4 ; ++i){
+        ret += pix[i] << (8 * (3-i));
+    }
     return ret;
 }
 
@@ -74,25 +32,16 @@ void simple_bus_encryption::main_action() {
             getRange();
             sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
 
-            openFileAndSaveMemory();
+            //openFileAndSaveMemory();
 
-
-            getRange();
-
-            seeMemory();
+            //seeMemory();
             KSA();
             PRGA();
 
             //compareResult();
 
-            seeMemory();
-            //KSA();
-            //PRGA();
-
-            //seeMemory();
-
-            //*control = 1;
-            *control = 0;
+            *control = 1;
+            //*control = 0;
             bus_port->direct_write(control, m_address_graphs);
             sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
@@ -114,6 +63,12 @@ int stringToint(const std::string str){
     return num;
 }
 
+std::string intTostring(int number){
+    std::stringstream ss;
+	  ss << number;
+	  return ss.str();
+}
+
 void simple_bus_encryption::compareResult(){
     std::vector<int> lines;
     std::string path = "../generator/output_d.txt";
@@ -129,9 +84,9 @@ void simple_bus_encryption::compareResult(){
     for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
         bus_port->direct_read(&data, i);
         if(data != lines.at(k))
-            std::cout<<"Err\n";
+            while(true)
+              std::cout<<"Err\n";
         k++;
-
     }
 }
 
@@ -145,16 +100,15 @@ void simple_bus_encryption::openFileAndSaveMemory(){
             lines.push_back(stringToint(line));
         }
         address_read_start = 20;
-        address_read_end = (lines.size()*4)+20;
+        address_read_end = (lines.size()*4);
         std::cout<<"MEMORY MAX: "<< address_read_end <<"\n";
         int data;
 
         int k = 0;
         for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
             data = lines.at(k);
-            std::cout<<data <<"\n" <<k<< "\n";
             k++;
-            //bus_port->direct_write(&data, i);
+            bus_port->direct_write(&data, i);
         }
 }
 
@@ -180,10 +134,27 @@ void simple_bus_encryption::KSA() {
     int j = 0;
     for(int i = 0 ; i< 256; i++){
         j = (j + s[i] + key_c[i % size_key]) % 256;
-        changee(i, j);
+        change(i, j);
     }
 
     sb_fprintf(stdout, "[CRIPT] KSA END\n");
+}
+
+
+void simple_bus_encryption::saveFile(std::string filename, std::vector<int> input, int split){
+    std::cout<<"Save File\n";
+    std::ofstream outputFile;
+    outputFile.open (filename.c_str());
+    std::string outputText= "";
+    for(unsigned int i=0; i < input.size(); i++){
+      if(i%split == 0){
+        outputText+= "\n";
+      }
+      outputText+= " " + intTostring(input.at(i));
+    }
+    outputFile << outputText;
+
+    outputFile.close();
 }
 
 void simple_bus_encryption::PRGA() {
@@ -192,15 +163,41 @@ void simple_bus_encryption::PRGA() {
     int mydata;
     int j=0;
     int i=0;
+    int temp;
     int descryption;
+    std::vector<int> pixels, input, output, line;
     for (unsigned int w = address_read_start; w <= address_read_end ; w+= 4){
         i = (i+1)%256;
         j = (j+s[i])%256;
         change(i,j);
         bus_port->direct_read(&mydata, w);
-        descryption = (s[(s[i] + s[j]) % 256])^(mydata);
+        input.push_back(mydata);
+
+        pixels = unpack(mydata);
+
+        for(unsigned int k = 0; k < pixels.size(); k++){
+          temp = (s[(s[i] + s[j]) % 256])^(pixels.at(k));
+          input.push_back(pixels.at(k));
+          line.push_back((s[(s[i] + s[j]) % 256]));
+          output.push_back(temp);
+          pixels.at(k) = temp;
+        }
+
+
+        descryption = pack(pixels);
+        output.push_back(descryption);
+
+        // Only 1 channel
+        //descryption = (s[(s[i] + s[j]) % 256])^(mydata);
+
+        // Test Error
+        //if(w==16380)
+        //  descryption = -8;
         bus_port->direct_write(&descryption, w);
     }
+    saveFile("./teste/line.txt", line, 4);
+    saveFile("./teste/entrada.txt", input, 5);
+    saveFile("./teste/saida.txt", output, 5);
 
     sb_fprintf(stdout, "[CRIPT] PRGA END\n");
 }

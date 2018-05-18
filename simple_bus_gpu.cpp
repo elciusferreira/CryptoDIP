@@ -108,6 +108,8 @@ void simple_bus_gpu::main_action() {
 
                     //wait(m_timeout/4, SC_NS);
                 }
+                int stop = 0;
+                bus_port->direct_write(&stop, flag_addr);
 
                 if (m_verbose) {
                     sb_fprintf(stdout, "[GPU] %s %s : mem[%x:%x]=(%x, %x, %x, %x, %x, %x, %x, %x)\n",

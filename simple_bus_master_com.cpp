@@ -153,7 +153,7 @@ void simple_bus_master_com::main_action() {
 
                 if (check_crc(decode(packet))) {
                     // save pixel in memory global (m_controller set position)
-                    sb_fprintf(stdout, "[COMUNICATION] -> CRC OOOOOOOOOKKKKKKKKKKKKKKKKKK, TIME: %s\n"
+                    sb_fprintf(stdout, "[COMUNICATION] -> CRC @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@, TIME: %s\n"
                               , sc_time_stamp().to_string().c_str());
 
 
@@ -214,7 +214,7 @@ void simple_bus_master_com::main_action() {
                           m_address_width,
                           mydata);
               wait(m_timeout, SC_NS);
-              
+
 
 
             mydata = 1;

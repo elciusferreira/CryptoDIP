@@ -17,16 +17,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="70d312a5-8965-4df7-82ec-ed3bb7b639bc" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/generator/test.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generator/teste.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generator/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/generator/output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simple_bus_encryption.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_encryption.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_encryption.h" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_encryption.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_gpu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_gpu.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_gpu.h" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_gpu.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simple_bus_main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_master_com.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_com.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simple_bus_master_com.h" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_com.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/simple_bus_master_gerad.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/simple_bus_master_gerad.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -59,8 +51,11 @@
           <file leaf-file-name="simple_bus_master_gerad.cpp" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="51">
-                  <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="18" />
+                <state relative-caret-position="323">
+                  <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
+                  <folding>
+                    <element signature="e#0#36#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -77,10 +72,22 @@
           <file leaf-file-name="simple_bus_encryption.cpp" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/simple_bus_encryption.cpp">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="458">
-                  <caret line="187" selection-start-line="187" selection-end-line="187" />
+                <state relative-caret-position="322">
+                  <caret line="143" column="29" selection-start-line="143" selection-start-column="29" selection-end-line="143" selection-end-column="29" />
                   <folding>
                     <element signature="e#1621#1655#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="simple_bus_main.cpp" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/simple_bus_main.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="102">
+                  <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+                  <folding>
+                    <element signature="e#0#20#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -184,17 +191,17 @@
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/simple_bus_master_gerad.h" />
         <option value="$PROJECT_DIR$/simple_bus_master_com.h" />
-        <option value="$PROJECT_DIR$/simple_bus_main.cpp" />
         <option value="$PROJECT_DIR$/generator/main2.h" />
         <option value="$PROJECT_DIR$/simple_bus_gpu.h" />
         <option value="$PROJECT_DIR$/simple_bus_gpu.cpp" />
         <option value="$PROJECT_DIR$/simple_bus_master_com.cpp" />
-        <option value="$PROJECT_DIR$/simple_bus_master_gerad.cpp" />
         <option value="$PROJECT_DIR$/generator/generator.cpp" />
         <option value="$PROJECT_DIR$/generator/generator.h" />
         <option value="$PROJECT_DIR$/simple_bus_test.h" />
-        <option value="$PROJECT_DIR$/simple_bus_encryption.cpp" />
         <option value="$PROJECT_DIR$/simple_bus_encryption.h" />
+        <option value="$PROJECT_DIR$/simple_bus_main.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_master_gerad.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_encryption.cpp" />
       </list>
     </option>
   </component>
@@ -207,7 +214,7 @@
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-1" />
-    <option name="y" value="889" />
+    <option name="y" value="-11" />
     <option name="width" value="1442" />
     <option name="height" value="912" />
   </component>
@@ -282,12 +289,12 @@
       <workItem from="1526323557365" duration="10634000" />
       <workItem from="1526345012977" duration="4281000" />
       <workItem from="1526483023418" duration="9297000" />
-      <workItem from="1526652280849" duration="10468000" />
+      <workItem from="1526652280849" duration="10737000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75912000" />
+    <option name="totallyTimeSpent" value="76181000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-11" width="1442" height="912" extended-state="6" />
@@ -534,13 +541,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="22" selection-start-line="1" selection-start-column="22" selection-end-line="1" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/generator/main2.h" />
     <entry file="file://$PROJECT_DIR$/simple_bus_communication.h">
       <provider selected="true" editor-type-id="text-editor">
@@ -642,27 +642,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_test.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="81" column="59" selection-start-line="81" selection-start-column="54" selection-end-line="81" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_encryption.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="187" selection-start-line="187" selection-end-line="187" />
-          <folding>
-            <element signature="e#1621#1655#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -672,6 +655,36 @@
           <caret line="74" selection-start-line="74" selection-end-line="74" />
           <folding>
             <element signature="e#1686#1706#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_encryption.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="143" column="29" selection-start-line="143" selection-start-column="29" selection-end-line="143" selection-end-column="29" />
+          <folding>
+            <element signature="e#1621#1655#0" expanded="true" />
           </folding>
         </state>
       </provider>
