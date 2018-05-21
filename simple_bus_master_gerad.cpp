@@ -25,7 +25,6 @@ std::vector<std::string> Process_file(std::string file_name)
 
 
 int inline stoi(const std::string str){
-    //std::string str = "123";
     int num;
     std::istringstream(str) >> num;
     return num;
@@ -65,21 +64,6 @@ std::vector<int> Gen_stream(const std::string crc,
 
     Data.push_back(_color);
 
-//    for (std::vector<int>::iterator it = Data.begin(); it != Data.end(); it++) {
-//        sb_fprintf(stdout, "[GREAD] - %i\n", *it);
-//
-//        char val = (*it >> 8 * 3) & 0xff;
-//        sb_fprintf(stdout, "[VRAU] %c\n", val);
-//
-//        val = (*it >> 8 * 2) & 0xff;
-//        sb_fprintf(stdout, "[VRAU] %c\n", val);
-//
-//        val = (*it >> 8 * 1) & 0xff;
-//        sb_fprintf(stdout, "[VRAU] %c\n", val);
-//
-//        val = *it & 0xff;
-//        sb_fprintf(stdout, "[VRAU] %c\n", val);
-//    }
 
     return Data;
 }
@@ -89,6 +73,7 @@ void simple_bus_master_gerad::main_action() {
     sb_fprintf(stdout, "GENERATOR START!\n");
     int flag;
     int flags;
+    int change = 0;
 
     flag = 0;
     bus_port->direct_write(&flag, 0);
@@ -113,10 +98,17 @@ void simple_bus_master_gerad::main_action() {
         // e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0
         //std::string line = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0";
         if (file.size() == 0) {
-            flags = 1;
-            bus_port->direct_write(&flags, 4);
+            bus_port->direct_read(&flags, 4);
+            if(flags == 0 && change == 0){
+              flags = 1;
+              change = 1;
+              bus_port->direct_write(&flags, 4);
+            }
             wait(m_timeout*200, SC_NS);
+            sb_fprintf(stdout, "[GENERATOR] WAITING!!!\n");
+            continue;
         }
+        sb_fprintf(stdout, "[GENERATOR] WORKING!!!\n");
         std::string line = file.at(0);
         file.erase(file.begin());
         int size = line.length();
@@ -154,11 +146,6 @@ void simple_bus_master_gerad::main_action() {
                     break;
             }
         }
-        //    sb_fprintf(stdout, "[GENERATOR] CRC -> %s\n", crc.c_str());
-        //    sb_fprintf(stdout, "[GENERATOR] R -> %s\n", r.c_str());
-        //    sb_fprintf(stdout, "[GENERATOR] G -> %s\n", g.c_str());
-        //    sb_fprintf(stdout, "[GENERATOR] B -> %s\n", b.c_str());
-        //    sb_fprintf(stdout, "[GENERATOR] A -> %s\n", a.c_str());
 
         std::vector<int> data = Gen_stream(crc, r, g, b, a);
 

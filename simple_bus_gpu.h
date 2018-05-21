@@ -13,6 +13,8 @@
 
 SC_MODULE(simple_bus_gpu) {
 private:
+    int *bufferA;
+    int *bufferB;
     unsigned int im_addr;
     unsigned int wr_addr;
     unsigned int flag_addr;
@@ -60,6 +62,8 @@ public:
     {
         SC_THREAD(main_action);
     }
+
+    ~simple_bus_gpu();
 
     void main_action();
     void toggleVerbose() { m_verbose = !m_verbose; };

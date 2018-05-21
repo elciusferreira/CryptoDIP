@@ -22,7 +22,6 @@ SC_MODULE(simple_bus_encryption)
                            , unsigned int address_reserved
                            , unsigned int address_graphs
                            , int timeout
-                           , int timeout_internal
                            , bool verbose = true)
     : sc_module(name_)
     , m_address_start(address_start)
@@ -30,7 +29,6 @@ SC_MODULE(simple_bus_encryption)
     , m_address_reserved(address_reserved)
     , m_address_graphs(address_graphs)
     , m_timeout(timeout)
-    , m_timeout_internal(timeout_internal)
     , m_verbose(verbose)
   {
     // process declaration
@@ -55,7 +53,7 @@ SC_MODULE(simple_bus_encryption)
 private:
   unsigned int m_address_start, m_address_end, m_address_reserved, m_address_graphs;
   unsigned int address_read_start, address_read_end;
-  int m_timeout, m_timeout_internal;
+  int m_timeout;
   bool m_verbose;
   int size_key;
   int key_c[9];

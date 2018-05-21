@@ -3,8 +3,8 @@
 
 void simple_bus_gpu::main_action() {
     int width, height, size, start, rd_addr;
-    int *bufferA = new int[m_max_size];
-    int *bufferB = new int[m_max_size];
+    bufferA = new int[m_max_size];
+    bufferB = new int[m_max_size];
 
     while (true) {
         bus_port->direct_read(&start, flag_addr);
@@ -130,4 +130,11 @@ void simple_bus_gpu::main_action() {
 
         wait(m_timeout, SC_NS);
     }
+}
+
+simple_bus_gpu::~simple_bus_gpu(){
+  if (bufferA) delete[] bufferA;
+  bufferA = (int *) 0;
+  if (bufferB) delete[] bufferB;
+  bufferB = (int *) 0;
 }

@@ -5,7 +5,6 @@
 // e85e0680276cda04f0c8315c42f5bb6adcf4389920ceb46cc9858dc981d60abf
 // ae5f2eab64c03d17939b8218239babf4a5da605061783eae985d11cc9471dbaf
 
-
 std::string itos(const int num){
     std::ostringstream convert;
     convert << num;
@@ -130,9 +129,9 @@ void simple_bus_master_com::main_action() {
     //wait(m_timeout, SC_NS);
 
     while (true) {
-        wait(m_timeout, SC_NS);
 
         read(&read_en, 4);
+        wait(m_timeout, SC_NS);
         //sb_fprintf(stdout, "[COMUNICATION] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), read_en);
         if (read_en == 0) { // check if received all packets
             read(&read_en, 0);
@@ -162,7 +161,7 @@ void simple_bus_master_com::main_action() {
                     memory_idx += 4;
                 }
                 else{
-                    sb_fprintf(stdout, "[COMUNICATION] -> CRC FUUUUUUUUUUUUUUUUCK, TIME: %s\n"
+                    sb_fprintf(stdout, "[COMUNICATION] -> CRC NNNNNNNNNNNNNNNNNNN, TIME: %s\n"
                               , sc_time_stamp().to_string().c_str());
                 }
 
@@ -180,6 +179,7 @@ void simple_bus_master_com::main_action() {
             else {
                 sb_fprintf(stdout, "[COMUNICATION] TIME: %s, WAITING\n",
                            sc_time_stamp().to_string().c_str());
+                wait(m_timeout, SC_NS);
             }
         }
         else {

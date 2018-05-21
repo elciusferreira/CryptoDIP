@@ -17,45 +17,6 @@ int pack(std::vector<int> pix){
     return ret;
 }
 
-void simple_bus_encryption::main_action() {
-    int *control = new int;
-
-    while (true) {
-        bus_port->direct_read(control, m_address_reserved);
-        sb_fprintf(stdout, "[CRIPT] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), *control);
-
-        if (*control == 1) {
-            sb_fprintf(stdout, " CAN WORK!!!\n");
-            *control = 0;
-            bus_port->direct_write(control, m_address_reserved);
-
-            getRange();
-            sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
-
-            //openFileAndSaveMemory();
-
-            //seeMemory();
-            KSA();
-            PRGA();
-
-            //compareResult();
-
-            *control = 1;
-            //*control = 0;
-            bus_port->direct_write(control, m_address_graphs);
-            sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
-                       sc_time_stamp().to_string().c_str(),
-                       m_address_graphs,
-                       *control);
-            wait(m_timeout, SC_NS);
-
-        } else {
-            sb_fprintf(stdout, " CANT WORK!!!\n");
-        }
-        wait(m_timeout, SC_NS);
-    }
-}
-
 int stringToint(const std::string str){
     //std::string str = "123";
     int num;
@@ -69,60 +30,53 @@ std::string intTostring(int number){
 	  return ss.str();
 }
 
-void simple_bus_encryption::compareResult(){
-    std::vector<int> lines;
-    std::string path = "../generator/output_d.txt";
-    std::ifstream input(path.c_str());
-    std::string line;
+void simple_bus_encryption::main_action() {
+    int control;
 
-    while (getline(input, line)){
-        lines.push_back(stringToint(line));
-    }
+    while (true) {
+        bus_port->direct_read(&control, m_address_reserved);
+        sb_fprintf(stdout, "[CRIPT] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), control);
 
-    int data;
-    int k = 0;
-    for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
-        bus_port->direct_read(&data, i);
-        if(data != lines.at(k))
-            while(true)
-              std::cout<<"Err\n";
-        k++;
+        if (control == 1) {
+            sb_fprintf(stdout, " CAN WORK!!!\n");
+            control = 0;
+            bus_port->direct_write(&control, m_address_reserved);
+
+            getRange();
+            sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
+
+            //openFileAndSaveMemory();
+
+            //seeMemory();
+            KSA();
+            PRGA();
+
+            //compareResult();
+
+            control = 1;
+            bus_port->direct_write(&control, m_address_graphs);
+            sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+                       sc_time_stamp().to_string().c_str(),
+                       m_address_graphs,
+                       control);
+
+
+        } else {
+            sb_fprintf(stdout, " CANT WORK!!!\n");
+        }
+        wait(m_timeout, SC_NS);
     }
 }
-
-void simple_bus_encryption::openFileAndSaveMemory(){
-        std::vector<int> lines;
-        std::string path = "../generator/output_e.txt";
-        std::ifstream input(path.c_str());
-        std::string line;
-
-        while (getline(input, line)){
-            lines.push_back(stringToint(line));
-        }
-        address_read_start = 20;
-        address_read_end = (lines.size()*4);
-        std::cout<<"MEMORY MAX: "<< address_read_end <<"\n";
-        int data;
-
-        int k = 0;
-        for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
-            data = lines.at(k);
-            k++;
-            bus_port->direct_write(&data, i);
-        }
-}
-
 
 void simple_bus_encryption::getRange() {
-    int *value = new int;
-    bus_port->direct_read(value, m_address_start);
-    address_read_start = *value;
+    int value;
+    bus_port->direct_read(&value, m_address_start);
+    address_read_start = value;
 
-    bus_port->direct_read(value, m_address_end);
-    address_read_end = *value;
+    bus_port->direct_read(&value, m_address_end);
+    address_read_end = value;
 
     sb_fprintf(stdout, "BEGIN: %d END: %d RESERVED: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
-    delete value;
 }
 
 void simple_bus_encryption::KSA() {
@@ -138,23 +92,6 @@ void simple_bus_encryption::KSA() {
     }
 
     sb_fprintf(stdout, "[CRIPT] KSA END\n");
-}
-
-
-void simple_bus_encryption::saveFile(std::string filename, std::vector<int> input, int split){
-    std::cout<<"Save File\n";
-    std::ofstream outputFile;
-    outputFile.open (filename.c_str());
-    std::string outputText= "";
-    for(unsigned int i=0; i < input.size(); i++){
-      if(i%split == 0){
-        outputText+= "\n";
-      }
-      outputText+= " " + intTostring(input.at(i));
-    }
-    outputFile << outputText;
-
-    outputFile.close();
 }
 
 void simple_bus_encryption::PRGA() {
@@ -208,14 +145,74 @@ void simple_bus_encryption::change(int i,int j) {
     s[j] = aux;
 }
 
+void simple_bus_encryption::saveFile(std::string filename, std::vector<int> input, int split){
+    std::cout<<"Save File\n";
+    std::ofstream outputFile;
+    outputFile.open (filename.c_str());
+    std::string outputText= "";
+    for(unsigned int i=0; i < input.size(); i++){
+      if(i%split == 0){
+        outputText+= "\n";
+      }
+      outputText+= " " + intTostring(input.at(i));
+    }
+    outputFile << outputText;
+
+    outputFile.close();
+}
+
+void simple_bus_encryption::compareResult(){
+    std::vector<int> lines;
+    std::string path = "../generator/output_d.txt";
+    std::ifstream input(path.c_str());
+    std::string line;
+
+    while (getline(input, line)){
+        lines.push_back(stringToint(line));
+    }
+
+    int data;
+    int k = 0;
+    for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
+        bus_port->direct_read(&data, i);
+        if(data != lines.at(k))
+            while(true)
+              std::cout<<"Err\n";
+        k++;
+    }
+}
+
+void simple_bus_encryption::openFileAndSaveMemory(){
+        std::vector<int> lines;
+        std::string path = "../generator/output_e.txt";
+        std::ifstream input(path.c_str());
+        std::string line;
+
+        while (getline(input, line)){
+            lines.push_back(stringToint(line));
+        }
+        address_read_start = 20;
+        address_read_end = (lines.size()*4);
+        std::cout<<"MEMORY MAX: "<< address_read_end <<"\n";
+        int data;
+
+        int k = 0;
+        for(unsigned i = address_read_start; i <= address_read_end; i+= 4){
+            data = lines.at(k);
+            k++;
+            bus_port->direct_write(&data, i);
+        }
+}
+
+
+
 void simple_bus_encryption::seeMemory() {
-    int *values = new int;
+    int values;
     sb_fprintf(stdout, "[CRIPT] START SEE MEMORY\n");
     for (unsigned int i = address_read_start; i <= address_read_end; i = i + 4) {
-        bus_port->direct_read(values, i);
-        sb_fprintf(stdout, "M-> %s MEMORY: %d  VALUE:%d\n", sc_time_stamp().to_string().c_str(), i, *values);
+        bus_port->direct_read(&values, i);
+        sb_fprintf(stdout, "M-> %s MEMORY: %d  VALUE:%d\n", sc_time_stamp().to_string().c_str(), i, values);
         wait(0, SC_NS);
     }
-    delete values;
     sb_fprintf(stdout, "[CRIPT] FINISH SEE MEMORY\n");
 }

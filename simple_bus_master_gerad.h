@@ -16,9 +16,15 @@ SC_MODULE(simple_bus_master_gerad) {
     SC_HAS_PROCESS(simple_bus_master_gerad);
 
     // constructor
-    simple_bus_master_gerad(sc_module_name name_, unsigned int address_start, unsigned int address_end, int timeout,
+    simple_bus_master_gerad(sc_module_name name_,
+                            unsigned int address_start,
+                            unsigned int address_end,
+                            int timeout,
                             bool verbose = true)
-            : sc_module(name_), m_address_start(address_start), m_address_end(address_end), m_timeout(timeout),
+            : sc_module(name_),
+              m_address_start(address_start),
+              m_address_end(address_end),
+              m_timeout(timeout),
               m_verbose(verbose) {
         // process declaration
         SC_THREAD(main_action);
