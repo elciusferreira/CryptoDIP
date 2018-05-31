@@ -4,8 +4,4 @@
 *~
 debug/
 release/
-*CMakeCache.txt
-*CMakeFiles/
-*Makefile
-*.cmake
-
+build/
