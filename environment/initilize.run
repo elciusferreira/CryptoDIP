@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir -p /home/CryptoDIP/debug
+cd /home/CryptoDIP/debug
+
+cmake -D CMAKE_BUILD_TYPE=Debug ..
+
+make && ./CryptoDIP.x
