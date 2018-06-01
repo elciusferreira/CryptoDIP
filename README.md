@@ -24,6 +24,8 @@ Docker
 
 Para os familiarizados ao `Docker`, compilamos uma imagem com o sistema operacional `Ubuntu 16.04`, com todas as dependências instaladas incluindo as versões destacadas do `OpenCV` e `SystemC`. A imagem está disponível em [johanneslpc/systemcv](https://hub.docker.com/r/johanneslpc/systemcv/ "SystemC OpenCV Docker environment").
 
+O `Dockerfile` gerador da imagem está disponível no diretório [environment](/environment).
+
 Compilando e Executando
 -----------------------
 
