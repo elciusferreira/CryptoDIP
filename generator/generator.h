@@ -245,7 +245,7 @@ private:
 
 public:
     ModuleTest(std::string path){
-        std::cout<<"Open file\nGetImageToPixels\n";
+        std::cout << "Open file\nGetImageToPixels\n";
         this->path = path;
         cv::Mat image;
         image = cv::imread(path, CV_LOAD_IMAGE_COLOR);
@@ -253,6 +253,7 @@ public:
         if (!image.data){
             std::cerr << "Could not open or find the image." << std::endl;
             _read = false;
+            exit(-1);
         }
         else{
             _read = true;

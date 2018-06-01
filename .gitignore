@@ -4,8 +4,4 @@
 *~
 debug/
 release/
-generator/CMakeCache.txt
-generator/CMakeFiles/
-generator/Makefile
-generator/*.cmake
-
+build/
