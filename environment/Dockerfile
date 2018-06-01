@@ -76,4 +76,4 @@ COPY initialize.run initialize.run
 
 # Definimos o script initialize como o comando initicial da imagem
 
-CMD ["./initialize.run"]
+CMD ["./initialize.run", "&&", "/bin/bash"]

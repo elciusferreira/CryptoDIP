@@ -79,7 +79,7 @@ void simple_bus_master_gerad::main_action() {
     bus_port->direct_write(&flag, 0);
 
     //std::vector<std::string> file = Process_file("../generator/teste.txt");
-    std::vector<std::string> file = Process_file("../generator/output.txt");
+    std::vector<std::string> file = Process_file("../resources/output.txt");
 
 
 //    newValue = 0;

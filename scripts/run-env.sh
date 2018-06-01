@@ -4,4 +4,5 @@ cd ..
 REPOPATH=$(pwd)
 echo "Repository path: " $REPOPATH
 
-docker run -it --name systemc_opencv_env -v $REPOPATH/src:/home/CryptoDIP johanneslpc/systemcv
+rm -rf $REPOPATH/src/debug/* $REPOPATH/src/release/*
+docker run -it --rm -v $REPOPATH/src:/home/CryptoDIP johanneslpc/systemcv
