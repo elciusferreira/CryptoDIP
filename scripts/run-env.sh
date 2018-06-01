@@ -27,7 +27,7 @@ if `docker ps -a | grep -q systemc_opencv_env`
 then
   # Caso já exista, inicia o container em cache
   echo "Already online. Starting environment..."
-  docker -i start systemc_opencv_env
+  docker start -i systemc_opencv_env
 else
   # Caso contrário, inicializa um novo container interativo
   echo "Initializing environment..."
