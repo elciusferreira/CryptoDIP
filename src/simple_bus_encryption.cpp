@@ -103,7 +103,7 @@ void simple_bus_encryption::PRGA() {
     int temp;
     int descryption;
     std::vector<int> pixels, input, output, line;
-    for (unsigned int w = address_read_start; w <= address_read_end ; w+= 4){
+    for (unsigned int w = address_read_start; w < address_read_end ; w+= 4){
         i = (i+1)%256;
         j = (j+s[i])%256;
         change(i,j);

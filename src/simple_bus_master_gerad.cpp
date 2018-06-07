@@ -4,22 +4,25 @@
 #include <sstream>
 #include <vector>
 
+void printFile(std::string filename, int num){
+    std::cout << "Save File\n";
+    std::ofstream outputFile;
+    outputFile.open (filename.c_str(), std::ios_base::app);
+    outputFile << "numero de linhas: ";
+    outputFile << num << "\n";
+    outputFile.close();
+}
+
 std::vector<std::string> Process_file(std::string file_name)
 {
     std::vector<std::string> lines;
     std::ifstream input(file_name.c_str());
     std::string line;
 
-    while (getline(input, line)){
-        //sb_fprintf(stdout, "%s\n", line.c_str());
+    while (getline(input, line))
         lines.push_back(line);
-    }
 
-    /*std::string test1 = "42a5fac04ad74c7274d1994cb3a576d0975dbab36e1c9841ac0be9c99702f5fd,75,75,75,75";
-    for (int i = 0; i < 1 ;  i++){
-        lines.push_back(test1);
-    }*/
-
+    printFile("debug.txt", lines.size());
     return lines;
 }
 
@@ -61,9 +64,7 @@ std::vector<int> Gen_stream(const std::string crc,
     _color += stoi(a);
 
     //sb_fprintf(stdout, "colors <rgba>: [%u]\n", _color);
-
     Data.push_back(_color);
-
 
     return Data;
 }
@@ -81,10 +82,9 @@ void simple_bus_master_gerad::main_action() {
     //std::vector<std::string> file = Process_file("../generator/teste.txt");
     std::vector<std::string> file = Process_file("../resources/output.txt");
 
-
 //    newValue = 0;
 //    bus_port->direct_write(&newValue, 0);
-    int line_size = 1;
+    int line_count = 0;
     // READ TXT!!!!
     while (true) {
         bus_port->direct_read(&flag, 0);
@@ -112,7 +112,8 @@ void simple_bus_master_gerad::main_action() {
         std::string line = file.at(0);
         file.erase(file.begin());
         int size = line.length();
-        sb_fprintf(stdout, "[GENERATOR] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LINE: %i!\n", line_size++);
+        sb_fprintf(stdout, "[GENERATOR] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LINE: %i!\n", line_count++);
+        printFile("contador_de_linhas.txt", line_count);
         std::string crc;
         std::string r;
         std::string g;

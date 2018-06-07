@@ -10,9 +10,11 @@ int main(int argc, char *argv[])
     std::cout << "Lendo imagem: " << argv[1] << std::endl;
     ModuleTest test(argv[1]);
     test.encryption();
-    //test.decryption();
+    // test.decryption();
     test.crcGenerator();
     test.saveFile();
+
+    test.CreateImageFromFile("output_test.txt");
 
     //TestCrypt t("output_e.txt");
     //t.decrypt();

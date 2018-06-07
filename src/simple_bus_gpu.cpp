@@ -14,8 +14,8 @@ void simple_bus_gpu::main_action() {
             sb_fprintf(stdout, "[GPU] TIME: %s START\n", sc_time_stamp().to_string().c_str());
 
             bus_port->direct_read(&rd_addr, im_addr);
-            bus_port->direct_read(&width, rd_addr);
-            bus_port->direct_read(&height, rd_addr + 4);
+//            bus_port->direct_read(&width, rd_addr);
+//            bus_port->direct_read(&height, rd_addr + 4);
             height = 64;
             width = 64;
 
@@ -25,7 +25,7 @@ void simple_bus_gpu::main_action() {
             wait(m_timeout/2, SC_NS);
 
             size = width * height;
-            rd_addr += 8;
+//            rd_addr += 8;
 
             if (size <= m_max_size) {
                 // Fetch image pixels into Buffer A

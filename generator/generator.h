@@ -187,7 +187,7 @@ private:
 
 public:
     TestCrypt(std::string file_name){
-        std::cout<<"Get File enpytion\n";
+        std::cout << "Get File enpytion\n";
         std::ifstream input(file_name.c_str());
         std::string line;
 
@@ -334,9 +334,77 @@ public:
     void saveFile(){
         std::cout<<"Save File\n";
         std::ofstream output;
-        output.open ("output_fe.txt");
+        output.open ("output_test.txt");
         output << outputText;
         output.close();
+    }
+
+    void CreateImageFromFile(std::string file_name) {
+        std::vector<std::string> lines;
+        std::ifstream input(file_name.c_str());
+        std::string l;
+        std::string crc, r, g, b, a;
+
+        while (getline(input, l))
+            lines.push_back(l);
+
+        int height = 64;
+        int width = 64;
+        int size = height * width;
+        char *data = new char[size*3];
+        int op = 0;
+
+        for (unsigned int line = 0; line < lines.size(); ++line){
+            for (unsigned int i = 0; i < lines.at(line).length(); ++i) {
+                if (lines.at(line).at(i) == ',') {
+                    op++;
+                    continue;
+                }
+                switch (op) {
+                    case 0:
+                        // std::cout << "CRC\n";
+                        crc += lines.at(line).at(i);
+                        break;
+                    case 1:
+                        // std::cout << "R\n";
+                        r += lines.at(line).at(i);
+                        break;
+                    case 2:
+                        // std::cout << "G\n";
+                        g += lines.at(line).at(i);
+                        break;
+                    case 3:
+                        // std::cout << "B\n";
+                        b += lines.at(line).at(i);
+                        break;
+                    case 4:
+                        // std::cout << "A\n";
+                        a += lines.at(line).at(i);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            // aqui
+
+            std::cout << "Li a linha " << lines.at(line) << std::endl;
+            std::cout << "R: " << r << std::endl;
+            std::cout << "G: " << g << std::endl;
+            std::cout << "B: " << b << std::endl << std::endl;
+
+            data[line*3] = char(std::atoi(b.c_str()) & 0xff);  // Blue component
+            data[line*3 +1] = char(std::atoi(g.c_str()) & 0xff); // Green component
+            data[line*3 +2] = char(std::atoi(r.c_str()) & 0xff); // Red component
+            op = 0;
+            r = "";
+            g = "";
+            b = "";
+            a = "";
+        }
+
+        std::string file = "imagemm.jpg";
+        cv::Mat src = cv::Mat(width, height, CV_8UC3, data);
+        cv::imwrite(file, src);
     }
 };
 
