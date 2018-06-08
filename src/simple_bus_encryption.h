@@ -21,6 +21,7 @@ SC_MODULE(simple_bus_encryption)
                            , unsigned int address_end
                            , unsigned int address_reserved
                            , unsigned int address_graphs
+                           , unsigned int address_width
                            , int timeout
                            , bool verbose)
     : sc_module(name_)
@@ -28,6 +29,7 @@ SC_MODULE(simple_bus_encryption)
     , m_address_end(address_end)
     , m_address_reserved(address_reserved)
     , m_address_graphs(address_graphs)
+    , m_address_width(address_width)
     , m_timeout(timeout)
     , m_verbose(verbose)
   {
@@ -52,7 +54,7 @@ SC_MODULE(simple_bus_encryption)
 
 private:
   unsigned int m_address_start, m_address_end, m_address_reserved, m_address_graphs;
-  unsigned int address_read_start, address_read_end;
+  unsigned int m_address_width, address_read_start, address_read_end;
   int m_timeout;
   bool m_verbose;
   int size_key;

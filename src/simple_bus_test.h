@@ -85,6 +85,7 @@ SC_MODULE(simple_bus_test) {
                                                       image_end_addr,
                                                       crypto_opflag,
                                                       gpu_opflag,
+                                                      image_width_addr,
                                                       timeout,
                                                       verbose);
 

@@ -242,6 +242,8 @@ private:
     std::string path, outputText;
     std::vector<Pixel> elements;
     bool _read;
+    int image_width;
+    int image_height;
 
 public:
     ModuleTest(std::string path){
@@ -256,7 +258,11 @@ public:
             exit(-1);
         }
         else{
-            _read = true;
+            _read = true;   // ?????????????????????????????????????????????????
+            image_width = image.cols;
+            image_height = image.rows;
+            elements.push_back(Pixel(image_width));
+            elements.push_back(Pixel(image_height));
 
             //printf("The image dimensions are %i x %i pixels.\n\n", image.cols, image.rows);
 

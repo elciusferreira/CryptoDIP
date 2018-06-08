@@ -108,9 +108,10 @@ bool simple_bus_master_com::check_crc(std::vector<std::string> pckt_data) {
 void simple_bus_master_com::main_action() {
     int mydata;
     int read_en;
-    unsigned int memory_idx = 20;
+    unsigned int memory_idx = 16;
     //unsigned int m_controller = 4;
     std::vector<int> packet;
+
 
     // Cant Work
     mydata = 0;
@@ -154,6 +155,7 @@ void simple_bus_master_com::main_action() {
                     bus_port->direct_write(&mydata, memory_idx);
                     wait(m_timeout, SC_NS);
                     memory_idx += 4;
+
                 } else {
                     if (m_verbose)
                         sb_fprintf(stdout, "[COMUNICATION] -> CRC NNNNNNNNNNNNNNNNNNN, TIME: %s\n",
@@ -161,7 +163,6 @@ void simple_bus_master_com::main_action() {
                 }
 
                 // save pixel in memory global (m_controller set position)
-
 
                 // Generator can work
                 mydata = 0;
@@ -180,14 +181,15 @@ void simple_bus_master_com::main_action() {
                            sc_time_stamp().to_string().c_str());
 
             // Stores the initial position of the image data in global memory
-            mydata = m_start_address_intern_memory + 20;
+            mydata = m_start_address_intern_memory + 16;
             bus_port->direct_write(&mydata, m_opflag);
             wait(m_timeout, SC_NS);
+
 
             if (m_verbose)
                 sb_fprintf(stdout, "[COMUNICATION] SAVE BEGIN MEMORY: TIME: %s READ FROM: %d VALUE: %d\n",
                            sc_time_stamp().to_string().c_str(),
-                           0,
+                           m_opflag,
                            mydata);
 
             // Stores the final position of the image data in global memory
@@ -198,17 +200,7 @@ void simple_bus_master_com::main_action() {
             if (m_verbose)
                 sb_fprintf(stdout, "[COMUNICATION] SAVE END MEMORY: TIME: %s READ FROM: %d VALUE: %d\n",
                            sc_time_stamp().to_string().c_str(),
-                           4,
-                           mydata);
-
-
-            mydata = 64;
-            bus_port->direct_write(&mydata, m_address_width);
-            wait(m_timeout, SC_NS);
-            if (m_verbose)
-                sb_fprintf(stdout, "[COMUNICATION] ON CRIP:  TIME: %s READ FROM: %d VALUE: %d\n",
-                           sc_time_stamp().to_string().c_str(),
-                           m_address_width,
+                           m_end_opflag,
                            mydata);
 
             mydata = 1;

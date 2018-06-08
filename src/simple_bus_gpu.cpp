@@ -15,12 +15,12 @@ void simple_bus_gpu::main_action() {
         if (start == 1) {
             bus_port->direct_read(&rd_addr, im_addr);
             wait(m_timeout, SC_NS);
-//            bus_port->direct_read(&width, im_width_addr);
-//            wait(m_timeout, SC_NS);
-//            bus_port->direct_read(&height, im_height_addr);
-//            wait(m_timeout, SC_NS);
-            width = 64;
-            height = 64;
+            bus_port->direct_read(&width, im_width_addr);
+            wait(m_timeout, SC_NS);
+            bus_port->direct_read(&height, im_height_addr);
+            wait(m_timeout, SC_NS);
+            //width = 64;
+            //height = 64;
 
             if (m_verbose) {
                 sb_fprintf(stdout, "[GPU] TIME: %s START\n", sc_time_stamp().to_string().c_str());

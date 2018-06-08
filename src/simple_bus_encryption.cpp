@@ -62,10 +62,14 @@ void simple_bus_encryption::main_action() {
             bus_port->direct_write(&control, m_address_graphs);
             wait(m_timeout, SC_NS);
             if(m_verbose)
-                       sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+                sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
                        m_address_graphs,
                        control);
+
+            control = 24;
+            bus_port->direct_write(&control, m_address_start);
+            wait(m_timeout, SC_NS);
 
 
         } else {
@@ -145,6 +149,8 @@ void simple_bus_encryption::PRGA() {
         //  descryption = -8;
         bus_port->direct_write(&descryption, w);
         wait(m_timeout, SC_NS);
+        if(m_verbose)
+            sb_fprintf(stdout, "[CRIPT] DECRYPTION !!!!!!\n");
     }
     if(m_verbose) {
         saveFile("./teste/line.txt", line, 4);
