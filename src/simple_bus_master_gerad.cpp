@@ -22,7 +22,7 @@ std::vector<std::string> Process_file(std::string file_name)
     while (getline(input, line))
         lines.push_back(line);
 
-    printFile("debug.txt", lines.size());
+    //printFile("debug.txt", lines.size());
     return lines;
 }
 
@@ -71,49 +71,55 @@ std::vector<int> Gen_stream(const std::string crc,
 
 
 void simple_bus_master_gerad::main_action() {
-    sb_fprintf(stdout, "GENERATOR START!\n");
+    if(m_verbose)
+        sb_fprintf(stdout, "GENERATOR START!\n");
     int flag;
     int flags;
     int change = 0;
 
+
     flag = 0;
-    bus_port->direct_write(&flag, 0);
+    bus_port->direct_write(&flag, m_opflag);
 
     //std::vector<std::string> file = Process_file("../generator/teste.txt");
     std::vector<std::string> file = Process_file("../resources/output.txt");
 
-//    newValue = 0;
-//    bus_port->direct_write(&newValue, 0);
     int line_count = 0;
     // READ TXT!!!!
     while (true) {
-        bus_port->direct_read(&flag, 0);
+        bus_port->direct_read(&flag, m_opflag);
+        wait(m_timeout, SC_NS);
         //sb_fprintf(stdout, "[GENERATIONS] TIME: %s VALUE: %d\n", sc_time_stamp().to_string().c_str(), flag);
         if (flag == 1) {  // SE FOR 1 FICA OCIOSO
-            sb_fprintf(stdout, "[GENERATOR] CANT WORK!!!\n");
-            wait(m_timeout, SC_NS);
+            if(m_verbose)
+                sb_fprintf(stdout, "[GENERATOR] CANT WORK!!!\n");
             continue;
         }
 
         // e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0
         //std::string line = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855,0,0,0,0";
         if (file.size() == 0) {
-            bus_port->direct_read(&flags, 4);
+            bus_port->direct_read(&flags, m_end_flag);
+            wait(m_timeout, SC_NS);
             if(flags == 0 && change == 0){
               flags = 1;
               change = 1;
-              bus_port->direct_write(&flags, 4);
+              bus_port->direct_write(&flags, m_end_flag);
             }
-            wait(m_timeout*200, SC_NS);
-            sb_fprintf(stdout, "[GENERATOR] WAITING!!!\n");
+            wait(m_timeout, SC_NS);
+            if(m_verbose)
+                sb_fprintf(stdout, "[GENERATOR] WAITING!!!\n");
             continue;
         }
-        sb_fprintf(stdout, "[GENERATOR] WORKING!!!\n");
+        if(m_verbose)
+            sb_fprintf(stdout, "[GENERATOR] WORKING!!!\n");
         std::string line = file.at(0);
         file.erase(file.begin());
         int size = line.length();
-        sb_fprintf(stdout, "[GENERATOR] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LINE: %i!\n", line_count++);
-        printFile("contador_de_linhas.txt", line_count);
+        if(m_verbose) {
+            sb_fprintf(stdout, "[GENERATOR] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LINE: %i!\n", line_count++);
+            printFile("contador_de_linhas.txt", line_count);
+        }
         std::string crc;
         std::string r;
         std::string g;
@@ -156,17 +162,19 @@ void simple_bus_master_gerad::main_action() {
         for (std::vector<int>::iterator it = data.begin(); it != data.end(); it++){
             value = *it;
             bus_port->direct_write(&value, address);
+            wait(m_timeout, SC_NS);
 
-            sb_fprintf(stdout, "[GENERATOR] WRITE-> TIME: %s READ FROM: %d VALUE: %d\n",
+            if(m_verbose)
+                sb_fprintf(stdout, "[GENERATOR] WRITE-> TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
                        address,
                        value);
 
             address += 4;
-            wait(m_timeout, SC_NS);
+
         }
         flag = 1;
-        bus_port->direct_write(&flag, 0);
+        bus_port->direct_write(&flag, m_opflag);
         wait(m_timeout, SC_NS);
     }
 }

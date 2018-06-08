@@ -19,11 +19,15 @@ SC_MODULE(simple_bus_master_gerad) {
     simple_bus_master_gerad(sc_module_name name_,
                             unsigned int address_start,
                             unsigned int address_end,
+                            unsigned int opflag,
+                            unsigned int end_opflag,
                             int timeout,
-                            bool verbose = true)
+                            bool verbose)
             : sc_module(name_),
               m_address_start(address_start),
               m_address_end(address_end),
+              m_opflag(opflag),
+              m_end_flag(end_opflag),
               m_timeout(timeout),
               m_verbose(verbose) {
         // process declaration
@@ -35,6 +39,7 @@ SC_MODULE(simple_bus_master_gerad) {
 
 private:
     unsigned int m_address_start, m_address_end;
+    unsigned int m_opflag, m_end_flag;
     int m_timeout;
     bool m_verbose;
 

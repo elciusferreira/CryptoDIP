@@ -22,7 +22,7 @@ SC_MODULE(simple_bus_encryption)
                            , unsigned int address_reserved
                            , unsigned int address_graphs
                            , int timeout
-                           , bool verbose = true)
+                           , bool verbose)
     : sc_module(name_)
     , m_address_start(address_start)
     , m_address_end(address_end)

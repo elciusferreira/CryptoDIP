@@ -26,81 +26,87 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="simple_bus_encryption.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple_bus_encryption.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
-              <folding>
-                <element signature="e#0#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="simple_bus_test.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple_bus_test.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="321">
-              <caret line="52" column="19" lean-forward="true" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="simple_bus_encryption.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple_bus_encryption.h">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file leaf-file-name="simple_bus_master_gerad.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="46" column="22" lean-forward="true" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="simple_bus_gpu.cpp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/simple_bus_gpu.cpp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="123">
-              <caret line="41" column="48" lean-forward="true" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="48" />
-              <folding>
-                <element signature="e#0#27#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="imageWrite.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/imageWrite.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="15" column="35" lean-forward="true" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.22777778">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="simple_bus_gpu.h" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/simple_bus_gpu.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="151">
+                  <caret line="46" column="42" lean-forward="true" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="simple_bus_test.h" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/simple_bus_test.h">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="289">
+                  <caret line="92" column="51" selection-start-line="92" selection-start-column="51" selection-end-line="92" selection-end-column="51" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="simple_bus_main.cpp" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/simple_bus_main.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="102">
+                  <caret line="6" column="20" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="20" />
+                  <folding>
+                    <element signature="e#0#20#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="simple_bus_gpu.cpp" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/simple_bus_gpu.cpp">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="374">
+                  <caret line="64" column="54" selection-start-line="64" selection-start-column="54" selection-end-line="64" selection-end-column="54" />
+                  <folding>
+                    <element signature="e#0#27#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>Process_file</find>
       <find>line_size</find>
+      <find>address_height</find>
+      <find>port</find>
+      <find>0</find>
+      <find>4</find>
+      <find>bus</find>
+      <find>save</find>
+      <find>file</find>
+      <find>printFile</find>
+      <find>KSA</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/simple_bus_test.h" />
-        <option value="$PROJECT_DIR$/simple_bus_master_gerad.cpp" />
-        <option value="$PROJECT_DIR$/simple_bus_encryption.cpp" />
         <option value="$PROJECT_DIR$/imageWrite.h" />
+        <option value="$PROJECT_DIR$/simple_bus_master_com.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_encryption.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_master_gerad.h" />
+        <option value="$PROJECT_DIR$/simple_bus_master_com.h" />
+        <option value="$PROJECT_DIR$/simple_bus_encryption.h" />
+        <option value="$PROJECT_DIR$/simple_bus_master_gerad.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_gpu.h" />
+        <option value="$PROJECT_DIR$/simple_bus_main.cpp" />
+        <option value="$PROJECT_DIR$/simple_bus_test.h" />
         <option value="$PROJECT_DIR$/simple_bus_gpu.cpp" />
       </list>
     </option>
@@ -113,7 +119,7 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="896" />
+    <option name="y" value="-4" />
     <option name="width" value="1440" />
     <option name="height" value="904" />
   </component>
@@ -179,12 +185,12 @@
       <updated>1527744788755</updated>
       <workItem from="1527744794385" duration="1376000" />
       <workItem from="1527831613680" duration="657000" />
-      <workItem from="1528395434258" duration="6858000" />
+      <workItem from="1528395434258" duration="19029000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8891000" />
+    <option name="totallyTimeSpent" value="21062000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="1440" height="904" extended-state="6" />
@@ -192,15 +198,15 @@
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.20972222" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32882884" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.3283208" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.3283208" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.47243106" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.9699248" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39974937" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -230,32 +236,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_test.h">
+    <entry file="file://$PROJECT_DIR$/simple_bus_fast_mem.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="321">
-          <caret line="52" column="19" lean-forward="true" selection-start-line="52" selection-start-column="19" selection-end-line="52" selection-end-column="19" />
+        <state relative-caret-position="113">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_encryption.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_encryption.cpp">
+    <entry file="file://$PROJECT_DIR$/simple_bus_communication.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="113" lean-forward="true" selection-start-line="113" selection-end-line="113" />
+        <state>
+          <caret selection-end-column="8" />
           <folding>
-            <element signature="e#0#34#0" expanded="true" />
+            <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
+    <entry file="file://$PROJECT_DIR$/simple_bus_master_com.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="46" column="22" lean-forward="true" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
+        <state relative-caret-position="150">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="16" />
           <folding>
-            <element signature="e#0#36#0" expanded="true" />
+            <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -263,14 +266,86 @@
     <entry file="file://$PROJECT_DIR$/imageWrite.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
-          <caret line="15" column="35" lean-forward="true" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+          <caret line="15" column="35" lean-forward="true" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_master_com.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="53" column="38" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_encryption.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="37" column="22" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_encryption.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-237">
+          <caret line="24" column="41" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="24" column="40" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-255">
+          <caret line="6" column="4" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="20" selection-start-line="6" selection-start-column="14" selection-end-line="6" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_test.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="92" column="51" selection-start-line="92" selection-start-column="51" selection-end-line="92" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simple_bus_gpu.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="46" column="42" lean-forward="true" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_gpu.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="123">
-          <caret line="41" column="48" lean-forward="true" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="48" />
+        <state relative-caret-position="374">
+          <caret line="64" column="54" selection-start-line="64" selection-start-column="54" selection-end-line="64" selection-end-column="54" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
           </folding>

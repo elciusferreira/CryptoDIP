@@ -35,15 +35,20 @@ void simple_bus_encryption::main_action() {
 
     while (true) {
         bus_port->direct_read(&control, m_address_reserved);
-        sb_fprintf(stdout, "[CRIPT] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), control);
+        wait(m_timeout, SC_NS);
+        if(m_verbose)
+            sb_fprintf(stdout, "[CRIPT] TIME: %s VALUE: %d ", sc_time_stamp().to_string().c_str(), control);
 
         if (control == 1) {
-            sb_fprintf(stdout, " CAN WORK!!!\n");
+            if(m_verbose)
+                sb_fprintf(stdout, " CAN WORK!!!\n");
             control = 0;
             bus_port->direct_write(&control, m_address_reserved);
+            wait(m_timeout, SC_NS);
 
             getRange();
-            sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
+            if(m_verbose)
+                sb_fprintf(stdout, "[MEMORY] BEGIN: %d END: %d FLAG: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
 
             //openFileAndSaveMemory();
 
@@ -55,32 +60,38 @@ void simple_bus_encryption::main_action() {
 
             control = 1;
             bus_port->direct_write(&control, m_address_graphs);
-            sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
+            wait(m_timeout, SC_NS);
+            if(m_verbose)
+                       sb_fprintf(stdout, "[CRIPT] WRITE MEM FULL-> TIME: %s READ FROM: %d VALUE: %d\n",
                        sc_time_stamp().to_string().c_str(),
                        m_address_graphs,
                        control);
 
 
         } else {
-            sb_fprintf(stdout, " CANT WORK!!!\n");
+            if(m_verbose)
+                sb_fprintf(stdout, " CANT WORK!!!\n");
         }
-        wait(m_timeout, SC_NS);
     }
 }
 
 void simple_bus_encryption::getRange() {
     int value;
     bus_port->direct_read(&value, m_address_start);
+    wait(m_timeout, SC_NS);
     address_read_start = value;
 
     bus_port->direct_read(&value, m_address_end);
+    wait(m_timeout, SC_NS);
     address_read_end = value;
 
-    sb_fprintf(stdout, "BEGIN: %d END: %d RESERVED: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
+    if(m_verbose)
+        sb_fprintf(stdout, "BEGIN: %d END: %d RESERVED: %d!!!\n", address_read_start, address_read_end, m_address_reserved);
 }
 
 void simple_bus_encryption::KSA() {
-    sb_fprintf(stdout, "[CRIPT] KSA BEGIN\n");
+    if(m_verbose)
+        sb_fprintf(stdout, "[CRIPT] KSA BEGIN\n");
     for(int i =0; i< 256; i++){
         s[i]=i;
     }
@@ -90,12 +101,13 @@ void simple_bus_encryption::KSA() {
         j = (j + s[i] + key_c[i % size_key]) % 256;
         change(i, j);
     }
-
-    sb_fprintf(stdout, "[CRIPT] KSA END\n");
+    if(m_verbose)
+        sb_fprintf(stdout, "[CRIPT] KSA END\n");
 }
 
 void simple_bus_encryption::PRGA() {
-    sb_fprintf(stdout, "[CRIPT] PRGA BEGIN\n");
+    if(m_verbose)
+        sb_fprintf(stdout, "[CRIPT] PRGA BEGIN\n");
 
     int mydata;
     int j=0;
@@ -108,6 +120,7 @@ void simple_bus_encryption::PRGA() {
         j = (j+s[i])%256;
         change(i,j);
         bus_port->direct_read(&mydata, w);
+        wait(m_timeout, SC_NS);
         input.push_back(mydata);
 
         pixels = unpack(mydata);
@@ -131,12 +144,15 @@ void simple_bus_encryption::PRGA() {
         //if(w==16380)
         //  descryption = -8;
         bus_port->direct_write(&descryption, w);
+        wait(m_timeout, SC_NS);
     }
-    saveFile("./teste/line.txt", line, 4);
-    saveFile("./teste/entrada.txt", input, 5);
-    saveFile("./teste/saida.txt", output, 5);
+    if(m_verbose) {
+        saveFile("./teste/line.txt", line, 4);
+        saveFile("./teste/entrada.txt", input, 5);
+        saveFile("./teste/saida.txt", output, 5);
 
-    sb_fprintf(stdout, "[CRIPT] PRGA END\n");
+        sb_fprintf(stdout, "[CRIPT] PRGA END\n");
+    }
 }
 
 void simple_bus_encryption::change(int i,int j) {
