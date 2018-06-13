@@ -261,8 +261,8 @@ public:
             _read = true;   // ?????????????????????????????????????????????????
             image_width = image.cols;
             image_height = image.rows;
-            elements.push_back(Pixel(image_width));
-            elements.push_back(Pixel(image_height));
+            // elements.push_back(Pixel(image_width));
+            // elements.push_back(Pixel(image_height));
 
             //printf("The image dimensions are %i x %i pixels.\n\n", image.cols, image.rows);
 
@@ -295,45 +295,66 @@ public:
         elements = encryptionF.run();
     }
 
-    /* CRC */
-    void crcGenerator(){
-        std::cout<<"CRC\n";
-        unsigned int size_pixels = elements.size();
+    /* Packet Generator */
+    void packetGenerator(){
+        std::cout << "Genetaring Packets\n";
 
-        for(unsigned int i = 0; i < size_pixels; i++){
-            //printf("volta %u\n", i);
-            //elements.at(i).print();
+        // std::vector<std::string> dimensions;    // Vetor de dimensões da imagem
+        // dimensions.push_back(std::to_string(image_width));  // Encriptando a altura e
+        // dimensions.push_back(std::to_string(image_height)); // largura da imagem
+        // Encryption dim_encrypt(dimensions);
+        // dimensions = dim_encrypt.run(); // Retorna o resultado da criptografia para a mesma variável
+        // unsigned int packet_count = 0;
 
-            std::string pixels;
-            pixels += char(elements[i].getR());
-            pixels += char(elements[i].getG());
-            pixels += char(elements[i].getB());
-            pixels += char(elements[i].getA());
+        {
+            std::string dimensions = std::to_string(image_width) + "," + std::to_string(image_height);
+            std::string crc = "";
+            std::string aux = crcGenerator(dimensions);
+            for (unsigned int j = 56; j < 64; j++)
+                crc += aux[j];   // Salva apenas os 8 últimos bytes do crc
+            // std::string crc = crcGenerator(dimensions);
 
-            const char *components = pixels.c_str();
-
-            //printf("Components: [%u %u %u %u]\n", components[0] & 0xff, components[1] & 0xff, components[2] & 0xff, components[3] & 0xff);
-
-            unsigned char digest[SHA256_DIGEST_LENGTH];
-
-            SHA256_CTX ctx;
-            SHA256_Init(&ctx);
-            SHA256_Update(&ctx, components, strlen(components));
-            SHA256_Final(digest, &ctx);
-
-            char* SHAString = new char[SHA256_DIGEST_LENGTH*2+1];
-            for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
-                sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
-
-            outputText += std::string(SHAString) +  ","
-                       + std::to_string(elements[i].getR()) + ","
-                       + std::to_string(elements[i].getG()) + ","
-                       + std::to_string(elements[i].getB()) + ","
-                       + std::to_string(elements[i].getA()) + "\n";
-
-
-            //outputText += std::to_string(elements[i].getR()) + "\n";
+            outputText += crc + "|" + dimensions + "\n";
         }
+
+        std::string line, pixels_buffer;
+        unsigned int num_pixels = elements.size();
+
+        for(unsigned int i = 0; i < num_pixels; i++){
+            if ((i > 0) && (i % 256 == 0)) {
+                std::string crc = "";
+                std::string aux = crcGenerator(pixels_buffer);
+                for (unsigned int j = 56; j < 64; j++)
+                    crc += aux[j];   // Salva apenas os 8 últimos bytes do crc
+                // std::string crc = crcGenerator(pixels_buffer);
+
+                outputText += crc + "|" + line + "\n";
+                pixels_buffer = "";
+                line = "";
+            }
+
+            pixels_buffer += char(elements[i].getR());
+            pixels_buffer += char(elements[i].getG());
+            pixels_buffer += char(elements[i].getB());
+            pixels_buffer += char(elements[i].getA());
+
+            line += std::to_string(elements[i].getR()) + ","
+                 + std::to_string(elements[i].getG()) + ","
+                 + std::to_string(elements[i].getB()) + ","
+                 + std::to_string(elements[i].getA()) + ",";
+
+        }
+
+        if (pixels_buffer != "") {
+            std::string crc = "";
+            std::string aux = crcGenerator(pixels_buffer);
+            for (unsigned int j = 56; j < 64; j++)
+                crc += aux[j];
+            // std::string crc = crcGenerator(pixels_buffer);
+            outputText += crc + "|" + line + "\n";
+        }
+
+
     }
 
     // Save file
@@ -343,6 +364,22 @@ public:
         output.open ("output_test.txt");
         output << outputText;
         output.close();
+    }
+
+    std::string crcGenerator(std::string input) {
+        const char *text = input.c_str();
+        unsigned char digest[SHA256_DIGEST_LENGTH];
+
+        SHA256_CTX ctx;
+        SHA256_Init(&ctx);
+        SHA256_Update(&ctx, text, strlen(text));
+        SHA256_Final(digest, &ctx);
+
+        char* SHAString = new char[SHA256_DIGEST_LENGTH*2+1];
+        for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+            sprintf(&SHAString[i*2], "%02x", (unsigned int)digest[i]);
+
+        return std::string(SHAString);
     }
 
     void CreateImageFromFile(std::string file_name) {
@@ -358,19 +395,21 @@ public:
         int width = 64;
         int size = height * width;
         char *data = new char[size*3];
-        int op = 0;
+        int op = 1;
+        int count_crc = 0;
 
         for (unsigned int line = 0; line < lines.size(); ++line){
+            count_crc++;
+            if(line == 256){
+                count_crc = 0;
+                continue;
+            }
             for (unsigned int i = 0; i < lines.at(line).length(); ++i) {
                 if (lines.at(line).at(i) == ',') {
                     op++;
                     continue;
                 }
                 switch (op) {
-                    case 0:
-                        // std::cout << "CRC\n";
-                        crc += lines.at(line).at(i);
-                        break;
                     case 1:
                         // std::cout << "R\n";
                         r += lines.at(line).at(i);
@@ -391,6 +430,7 @@ public:
                         break;
                 }
             }
+
             // aqui
 
             std::cout << "Li a linha " << lines.at(line) << std::endl;
@@ -406,9 +446,10 @@ public:
             g = "";
             b = "";
             a = "";
+            crc = "";
         }
 
-        std::string file = "imagemm.jpg";
+        std::string file = "imagem.jpg";
         cv::Mat src = cv::Mat(width, height, CV_8UC3, data);
         cv::imwrite(file, src);
     }

@@ -11,10 +11,11 @@ int main(int argc, char *argv[])
     ModuleTest test(argv[1]);
     test.encryption();
     // test.decryption();
-    test.crcGenerator();
+    // test.crcGenerator();
+    test.packetGenerator();
     test.saveFile();
 
-    test.CreateImageFromFile("output_test.txt");
+    //test.CreateImageFromFile("output_test.txt");
 
     //TestCrypt t("output_e.txt");
     //t.decrypt();

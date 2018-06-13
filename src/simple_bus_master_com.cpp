@@ -2,9 +2,6 @@
 #include "simple_bus_types.h"
 #include <sstream>
 
-// e85e0680276cda04f0c8315c42f5bb6adcf4389920ceb46cc9858dc981d60abf
-// ae5f2eab64c03d17939b8218239babf4a5da605061783eae985d11cc9471dbaf
-
 std::string itos(const int num) {
     std::ostringstream convert;
     convert << num;
@@ -19,17 +16,18 @@ int inline stoi(const std::string str) {
 }
 
 // Calculate packet CRC
-std::string simple_bus_master_com::crc_generator(int red, int green, int blue, int alpha) {
+int simple_bus_master_com::crc_generator(std::vector<int> stream) {
     std::string crc;
-
     std::string pixels;
-    pixels += char(red);
-    pixels += char(green);
-    pixels += char(blue);
-    pixels += char(alpha);
+
+    for (std::vector<int>::iterator it = stream.begin(); it != stream.end(); ++it) {
+        pixels += itos(((*it) >> 24) & 0xff);
+        pixels += itos(((*it) >> 16) & 0xff);
+        pixels += itos(((*it) >> 8) & 0xff);
+        pixels += itos((*it) & 0xff);
+    }
 
     const char *components = pixels.c_str();
-
     unsigned char digest[SHA256_DIGEST_LENGTH];
 
     SHA256_CTX ctx;
@@ -37,73 +35,33 @@ std::string simple_bus_master_com::crc_generator(int red, int green, int blue, i
     SHA256_Update(&ctx, components, strlen(components));
     SHA256_Final(digest, &ctx);
 
-    //sb_fprintf(stdout, "[COMUNICATION][CRC GENERATOR] STRLEN: %i\n", strlen(components));
-
     char *SHAString = new char[SHA256_DIGEST_LENGTH * 2 + 1];
     for (unsigned int i = 0; i < SHA256_DIGEST_LENGTH; i++)
         sprintf(&SHAString[i * 2], "%02x", (unsigned int) digest[i]);
 
-    // sb_fprintf(stdout, "[COMUNICATION][CRC GENERATOR] -> CRC %s, RED: %i, GREEN: %i, BLUE: %i, ALPHA: %i, RED_CHAR: %u TIME: %s\n"
-    //            , SHAString, red, green, blue, alpha, int(components[0]) & 0xff, sc_time_stamp().to_string().c_str());
+    std::string aux = SHAString;
+    for (unsigned int j = 56; j < 64; j++)
+        crc += aux[j];
 
-    //sb_fprintf(stdout, "\n------> AQUI: ");
-
-    // for (unsigned int b = 0; b < strlen(components); b++)
-    //     sb_fprintf(stdout, "%c", components[b]);
-    // sb_fprintf(stdout, "\n");
-
-
-    return SHAString;
+    return stoi(crc);
 }
 
-std::vector<std::string> decode(std::vector<int> code) {
-    std::string crc = "", r = "", g = "", b = "", a = "";
-    std::vector<std::string> ret;
-
-    for (std::vector<int>::iterator it = code.begin(); it != code.end(); ++it) {
-        if (it == code.end() - 1) {
-            r += itos(((*it) >> 24) & 0xff);
-            g += itos(((*it) >> 16) & 0xff);
-            b += itos(((*it) >> 8) & 0xff);
-            a += itos((*it) & 0xff);
-        } else {
-            for (int i = 0; i < 4; ++i)
-                crc += char((*it) >> ((3 - i) * 8));
-        }
-    }
-
-    ret.push_back(crc);
-    ret.push_back(r);
-    ret.push_back(g);
-    ret.push_back(b);
-    ret.push_back(a);
-
-    //sb_fprintf(stdout, "[COMUNICATION][decode] -> CRC %s, RED: %s, GREEN: %s, BLUE: %s, ALPHA: %s, TIME: %s\n",
-    //          crc.c_str(), r.c_str(), g.c_str(), b.c_str(), a.c_str(), sc_time_stamp().to_string().c_str());
-
-    return ret;
-}
 
 // Verify data integrity.
-bool simple_bus_master_com::check_crc(std::vector<std::string> pckt_data) {
-    std::string crc = pckt_data[0];
-    int red = stoi(pckt_data[1]);
-    int green = stoi(pckt_data[2]);
-    int blue = stoi(pckt_data[3]);
-    int alpha = stoi(pckt_data[4]);
+bool simple_bus_master_com::check_crc(std::vector<int> pckt_data) {
+    int crc = pckt_data[0];
+    pckt_data.erase(pckt_data.begin());
+    std::vector<int> pixels = pckt_data;
+    int expected_crc = crc_generator(pixels);
 
-    std::string expected_crc = crc_generator(red, green, blue, alpha);
-    if(m_verbose)
+    if (m_verbose)
         sb_fprintf(stdout,
-               "[COMUNICATION][CHECK] -> CRC READ: %s, CRC EXPECTED: %s, RED: %i, GREEN: %i, BLUE: %i, ALPHA: %i, TIME: %s\n",
-               crc.c_str(), expected_crc.c_str(), red, green, blue, alpha, sc_time_stamp().to_string().c_str());
+                   "[COMUNICATION][CHECK] -> CRC READ: %u, CRC EXPECTED: %u, TIME: %s\n",
+                   crc, expected_crc, sc_time_stamp().to_string().c_str());
 
-
-    if (expected_crc == crc) {
-        return true;
-    } else
-        return false;
+    return expected_crc == crc;
 }
+
 
 void simple_bus_master_com::main_action() {
     int mydata;
@@ -111,7 +69,7 @@ void simple_bus_master_com::main_action() {
     unsigned int memory_idx = 16;
     //unsigned int m_controller = 4;
     std::vector<int> packet;
-
+    bool isDimensions = true;
 
     // Cant Work
     mydata = 0;
@@ -129,34 +87,63 @@ void simple_bus_master_com::main_action() {
             read(&read_en, m_opflag);
             wait(m_timeout_com, SC_NS);
 
-            if (read_en == 1) { // check if can the module mcan work
+            if (read_en == 1) { // check if can the module can work
                 //sb_fprintf(stdout, "[COMUNICATION] ENTRY");
-                for (unsigned int i = m_start_address_intern_memory + 8; i <= m_end_address_intern_memory; i += 4) {
-                    read(&mydata, i);
-                    wait(m_timeout_com, SC_NS);
-                    packet.push_back(mydata);
+                if (isDimensions) {
+                    for (unsigned int i = m_start_address_intern_memory + 8; i <= m_start_address_intern_memory + 16; i += 4) {
+                        read(&mydata, i);
+                        wait(m_timeout_com, SC_NS);
+                        packet.push_back(mydata);
 
-                    if (m_verbose)
-                        sb_fprintf(stdout, "[COMUNICATION] -> I: %i, TIME: %s, VALUE: %u\n",
-                                   i, sc_time_stamp().to_string().c_str(), mydata);
+                        if (m_verbose)
+                            sb_fprintf(stdout, "[COMUNICATION] -> I: %i, TIME: %s, VALUE: %u\n",
+                                       i, sc_time_stamp().to_string().c_str(), mydata);
+                    }
+                }
+                else {
+                    for (unsigned int i = m_start_address_intern_memory + 8; i <= m_end_address_intern_memory; i += 4) {
+                        read(&mydata, i);
+                        wait(m_timeout_com, SC_NS);
+                        packet.push_back(mydata);
 
+                        if (m_verbose)
+                            sb_fprintf(stdout, "[COMUNICATION] -> I: %i, TIME: %s, VALUE: %u\n",
+                                       i, sc_time_stamp().to_string().c_str(), mydata);
+
+
+                    }
                 }
                 // get crc from packets
                 // check crc
 
-                if (check_crc(decode(packet))) {
+                if (check_crc(packet)) {
                     // save pixel in memory global (m_controller set position)
                     if (m_verbose)
-                        sb_fprintf(stdout, "[COMUNICATION] -> CRC @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@, TIME: %s\n",
+                        sb_fprintf(stdout, "[COMUNICATION] -> CRC @@@@@@@@@@@, TIME: %s\n",
                                    sc_time_stamp().to_string().c_str());
 
+                    unsigned int end;
 
-                    mydata = *(packet.end() - 1);
-                    bus_port->direct_write(&mydata, memory_idx);
-                    wait(m_timeout, SC_NS);
-                    memory_idx += 4;
+                    if (isDimensions)
+                        end = m_start_address_intern_memory + 16;
+                    else
+                        end = m_end_address_intern_memory;
 
-                } else {
+                    packet.erase(packet.begin());
+                    for (unsigned int i = m_start_address_intern_memory + 12; i <= end; i += 4) {
+                        if (!packet.empty()) {
+                            mydata = packet.at(0);
+                            packet.erase(packet.begin());
+                        }
+                        else
+                            break;
+
+                        bus_port->direct_write(&mydata, memory_idx);
+                        wait(m_timeout, SC_NS);
+                        memory_idx += 4;
+                    }
+                }
+                else {
                     if (m_verbose)
                         sb_fprintf(stdout, "[COMUNICATION] -> CRC NNNNNNNNNNNNNNNNNNN, TIME: %s\n",
                                    sc_time_stamp().to_string().c_str());
@@ -170,18 +157,20 @@ void simple_bus_master_com::main_action() {
                 wait(m_timeout_com, SC_NS);
 
                 packet.clear();
+                isDimensions = false;
             } else {
                 if (m_verbose)
                     sb_fprintf(stdout, "[COMUNICATION] TIME: %s, WAITING\n",
                                sc_time_stamp().to_string().c_str());
             }
-        } else {
+        }
+        else {
             if (m_verbose)
                 sb_fprintf(stdout, "[COMUNICATION] TIME: %s, FINISHED\n",
                            sc_time_stamp().to_string().c_str());
 
             // Stores the initial position of the image data in global memory
-            mydata = m_start_address_intern_memory + 16;
+            mydata = m_start_address_intern_memory + 24;
             bus_port->direct_write(&mydata, m_opflag);
             wait(m_timeout, SC_NS);
 

@@ -28,7 +28,7 @@ private:
     bool m_verbose;
     int *MEM;
 
-    std::string crc_generator(int red, int green, int blue, int alpha);
+    int crc_generator(std::vector<int> stream);
 
 public:
     // ports
@@ -80,7 +80,7 @@ public:
 
     // process
     void main_action();
-    bool check_crc(std::vector<std::string> pckt_data);
+    bool check_crc(std::vector<int> pckt_data);
 
     // direct Slave Interface
     bool direct_read(int *data, unsigned int address);
