@@ -42,7 +42,7 @@
       <file leaf-file-name="simple_bus_master_gerad.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="393">
+            <state relative-caret-position="208">
               <caret line="113" column="60" lean-forward="true" selection-start-line="113" selection-start-column="60" selection-end-line="113" selection-end-column="60" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
@@ -171,22 +171,22 @@
       <workItem from="1527744794385" duration="1376000" />
       <workItem from="1527831613680" duration="657000" />
       <workItem from="1528395434258" duration="23980000" />
-      <workItem from="1528864400391" duration="7307000" />
+      <workItem from="1528864400391" duration="7518000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33320000" />
+    <option name="totallyTimeSpent" value="33531000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1365" y="-4" width="1368" height="773" extended-state="6" />
+    <frame x="-1" y="-4" width="1368" height="773" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.19399707" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Messages" order="7" weight="0.5840841" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.3283208" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50069445" side_tool="true" weight="0.0037593986" />
+      <window_info active="true" anchor="bottom" id="Event Log" order="7" sideWeight="0.50069445" side_tool="true" visible="true" weight="0.003003003" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49930555" weight="0.7612613" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -374,7 +374,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simple_bus_master_gerad.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
+        <state relative-caret-position="208">
           <caret line="113" column="60" lean-forward="true" selection-start-line="113" selection-start-column="60" selection-end-line="113" selection-end-column="60" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
